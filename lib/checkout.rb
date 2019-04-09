@@ -25,7 +25,7 @@ class Checkout
     checkout = Checkout.new
     checkout.id = item['id']
     checkout.barcode = item['barcode']
-    checkout.created = item['timestamp']
+    checkout.created = item['updatedDate']
 
     if item['bibIds'].is_a?(Array) && ! item['bibIds'].empty?
       response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"

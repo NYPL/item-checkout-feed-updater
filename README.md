@@ -57,6 +57,14 @@ bundle exec rspec
 
 ## Deploy
 
-Deployments are entirely handled by Travis-ci.com. To deploy to development, qa, or production, commit code to the `development`, `qa`, and `master` branches on origin, respectively.
+~Deployments are entirely handled by Travis-ci.com. To deploy to development, qa, or production, commit code to the `development`, `qa`, and `master` branches on origin, respectively.~
 
+Deployment is a little rough right now because we use Nokogiri for XML generation, which depends on native extensions. Essentially running `bundle install` will produce a nokogiri bound to osx libraries, which will not work in the target environment; You have to build Nokogiri in the target environment.
 
+Steps to deploy:
+
+1. Open a shell into the docker container: `docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bash`
+1. run `bundle install --deployment`
+1. `exit` out of that
+1. Bake up a zip file: `zip -r ../item-checkout-feed-updater.zip *` and upload it to the lambda
+1. Make sure ENV vars, handler, and execution time are set correctly

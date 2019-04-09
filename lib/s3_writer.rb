@@ -21,17 +21,20 @@ class S3Writer
           xml.name "NYPL Digital"
         }
         xml.id "urn:nypl:item-checkout-feed"
+        xml.updated Time.now
 
         checkouts.each do |checkout|
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
-            xml.title "\"#{checkout.title}\" by #{checkout.author}"
+            title = "\"#{checkout.title}\""
+            title += " by #{checkout.author}" if checkout.author
+            xml.title title
             xml.link checkout.link
             xml.updated checkout.created
             xml['dcterms'].title checkout.title if checkout.title
             xml['dc'].contributor checkout.author if checkout.author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.isbn
-            xml['dc'].identifier "urn:barcode:#{checkout.barcode}"
+            xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.barcode
           }
         end
       }

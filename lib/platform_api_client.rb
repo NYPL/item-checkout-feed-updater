@@ -34,7 +34,7 @@ class PlatformApiClient
         http.request(request)
       end
 
-      Application.logger.debug "Got platform api response", { code: response.code, body: response.body }
+      # Application.logger.debug "Got platform api response", { code: response.code, body: response.body }
 
       parse_json_response response
 

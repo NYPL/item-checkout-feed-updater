@@ -6,6 +6,7 @@ gem 'aws-sdk-kms'
 gem 'avro'
 gem 'nypl_log_formatter', '~> 0.1.2'
 gem 'atom-tools'
+gem 'ratom'
 
 group :dev, :test do
   gem 'rspec'

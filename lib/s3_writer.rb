@@ -26,7 +26,7 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             xml.title "\"#{checkout.title}\" by #{checkout.author}"
-            xml.link checkout.id
+            xml.link checkout.link
             xml.updated checkout.created
             xml['dcterms'].title checkout.title if checkout.title
             xml['dc'].contributor checkout.author if checkout.author

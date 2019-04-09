@@ -1,5 +1,5 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :catalog_url
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :catalog_url, :link
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
@@ -35,6 +35,7 @@ class Checkout
 
         checkout.title = bib['title']
         checkout.author = bib['author']
+        checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
 
         # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
         checkout.isbn = self.marc_value bib, '020', 'a'

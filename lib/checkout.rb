@@ -10,11 +10,11 @@ class Checkout
       .select { |field| field['marcTag'] == marc }
       .first
     if ! var_block.nil?
-      subfield = var_block['subfields']
-        .select { |subfield| subfield['tag'] == subfield }
+      subfield_block = var_block['subfields']
+        .select { |subfield_b| subfield_b['tag'] == subfield }
         .first
-      if ! subfield.nil?
-        return subfield['content']
+      if ! subfield_block.nil?
+        return subfield_block['content']
       end
     end
 
@@ -35,7 +35,7 @@ class Checkout
 
         checkout.title = bib['title']
         checkout.author = bib['author']
-        
+
         # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
         checkout.isbn = self.marc_value bib, '020', 'a'
         checkout.isbn.gsub! /\s\(.*/, '' if !checkout.isbn.nil?

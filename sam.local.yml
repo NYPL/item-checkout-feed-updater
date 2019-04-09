@@ -17,5 +17,5 @@ Resources:
           NYPL_OAUTH_SECRET: AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx8ZuLftGsgDmOxxBICARCAQ3ZSNw6hWlqI73kLJcs8Zg3O13PKiATfXXDUvGFim/KolFmQDCsVp7JFF9Jg01U++KNtcGJiVev7z3OAPNXc3fqGp6k=
           MAX_CHECKOUTS_IN_MEMORY: 100
           S3_BUCKET_NAME: 'item-checkout-feed-production'
-          S3_FEED_KEY: 'feed.xml'
-          LOG_LEVEL: debug
+          # S3_FEED_KEY: 'feed.xml'
+          LOG_LEVEL: info

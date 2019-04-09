@@ -16,7 +16,7 @@ class S3Writer
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
         'xmlns:dcterms' => "http://purl.org/dc/terms/") {
 
-        xml.title = "Latest NYPL Checkouts"
+        xml.title "Latest NYPL Checkouts"
         xml.author {
           xml.name "NYPL Digital"
         }
@@ -26,11 +26,11 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             xml.title "\"#{checkout.title}\" by #{checkout.author}"
-            xml.link = checkout.id
-            xml.updated = checkout.created
-            xml['dcterms'].title checkout.title
-            xml['dc'].contributor checkout.author
-            xml['dc'].identifier "urn:isbn:#{checkout.isbn}"
+            xml.link checkout.id
+            xml.updated checkout.created
+            xml['dcterms'].title checkout.title if checkout.title
+            xml['dc'].contributor checkout.author if checkout.author
+            xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.isbn
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}"
           }
         end
@@ -46,6 +46,10 @@ class S3Writer
   def write(checkouts)
     xml = feed_xml checkouts
     Application.logger.debug "Generated atom feed: #{xml}"
-    s3_client.write ENV['S3_FEED_KEY'], xml
+    if ENV['S3_FEED_KEY']
+      s3_client.write ENV['S3_FEED_KEY'], xml
+    else
+      Application.logger.error "No ENV['S3_FEED_KEY'] configured!"
+    end
   end
 end

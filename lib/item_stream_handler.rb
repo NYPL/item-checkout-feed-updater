@@ -36,7 +36,7 @@ class ItemStreamHandler
   # Handle storage of proxied requests
   def handle (event)
 
-    changes_made = false
+    checkout_count = 0
 
     event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
@@ -44,20 +44,20 @@ class ItemStreamHandler
         avro_data = record["kinesis"]["data"]
 
         decoded = avro_decoder('Item').decode avro_data
-        # Application.logger.debug "Decoded item", decoded
         
         # Presence of 'duedate' indicates it's checked-out
         if ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
           add_checkout checkout
           
-          changes_made = true
+          checkout_count += 1
         end
       end
-    # Application.logger.debug "After processing, got: #{@checkouts}" if @checkouts && @checkouts.size
+
+    Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 
     # If any changes occurred, push latest to S3 via S3Writer
-    Application.s3_writer.write @checkouts if changes_made
+    Application.s3_writer.write @checkouts if checkout_count > 0
  
     { success: true }
   end

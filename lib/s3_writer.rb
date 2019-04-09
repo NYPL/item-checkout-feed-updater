@@ -1,5 +1,7 @@
 require 'atom/feed'
 
+require_relative 's3_client'
+
 class S3Writer
   def s3_client
     @s3_client = S3Client.new if @s3_client.nil?
@@ -23,6 +25,6 @@ class S3Writer
   def write(checkouts)
     xml = feed_xml checkouts
     Application.logger.debug "Generated atom feed: #{xml}"
-    # 
+    s3_client.write ENV['S3_FEED_KEY'], xml
   end
 end

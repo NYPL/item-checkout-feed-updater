@@ -14,7 +14,7 @@ class ItemStreamHandler
   def add_checkout(checkout)
     @checkouts = [] if @checkouts.nil?
 
-    Application.logger.debug "Adding checkout #{checkout}"
+    # Application.logger.debug "Adding checkout #{checkout}"
 
     # Add checkout to end:
     @checkouts << checkout
@@ -44,7 +44,7 @@ class ItemStreamHandler
         avro_data = record["kinesis"]["data"]
 
         decoded = avro_decoder('Item').decode avro_data
-        Application.logger.debug "Decoded item", decoded
+        # Application.logger.debug "Decoded item", decoded
         
         # Presence of 'duedate' indicates it's checked-out
         if ! decoded['status']['duedate'].nil?
@@ -54,7 +54,7 @@ class ItemStreamHandler
           changes_made = true
         end
       end
-    Application.logger.debug "After processing, got: #{@checkouts.size}"
+    # Application.logger.debug "After processing, got: #{@checkouts}" if @checkouts && @checkouts.size
 
     # If any changes occurred, push latest to S3 via S3Writer
     Application.s3_writer.write @checkouts if changes_made

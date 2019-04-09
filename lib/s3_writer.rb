@@ -1,4 +1,5 @@
-require 'atom/feed'
+require 'rubygems'
+require 'nokogiri'
 
 require_relative 's3_client'
 
@@ -9,17 +10,37 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-    feed = Atom::Feed.new
-    checkouts.each do |checkout|
-      entry = Atom::Entry.new
-      entry.title = checkout.title
+    builder = Nokogiri::XML::Builder.new do |xml|
+      xml.feed(
+        'xmlns' => "http://www.w3.org/2005/Atom", 
+        'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
+        'xmlns:dcterms' => "http://purl.org/dc/terms/") {
 
-      # TODO Add other properties
+        xml.title = "Latest NYPL Checkouts"
+        xml.author {
+          xml.name "NYPL Digital"
+        }
+        xml.id "urn:nypl:item-checkout-feed"
 
-      feed << entry
+        checkouts.each do |checkout|
+          xml.entry {
+            xml.id "#{checkout.id}-#{checkout.barcode}"
+            xml.title "\"#{checkout.title}\" by #{checkout.author}"
+            xml.link = checkout.id
+            xml.updated = checkout.created
+            xml['dcterms'].title checkout.title
+            xml['dc'].contributor checkout.author
+            xml['dc'].identifier "urn:isbn:#{checkout.isbn}"
+            xml['dc'].identifier "urn:barcode:#{checkout.barcode}"
+          }
+        end
+      }
     end
 
-    feed.to_s
+    Application.logger.debug "Entry #{builder.to_xml}"
+
+    # Application.logger.debug "Check out entry: #{entry}"
+    builder.to_xml
   end
 
   def write(checkouts)

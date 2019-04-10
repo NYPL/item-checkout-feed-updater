@@ -29,7 +29,7 @@ class S3Writer
             title = "\"#{checkout.title}\""
             title += " by #{checkout.author}" if checkout.author
             xml.title title
-            xml.link checkout.id
+            xml.link checkout.link
             xml.updated checkout.created
             xml['dcterms'].title checkout.title if checkout.title
             xml['dc'].contributor checkout.author if checkout.author

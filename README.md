@@ -8,6 +8,7 @@ This app listens on the Item kinesis stream to identify Item updates that *look 
  * id: Item identifier (unique to item)
  * barcode: Item barcode (unique to item)
  * isbn: Item ISBN (for use looking up cover art?)
+ * link: The link of this item's bib on browse.nypl.org
 
  That list of items is periodically uploaded as an atom feed to S3 for consumption by any client interested in showing a feed of checkouts.
 

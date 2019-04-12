@@ -1,0 +1,719 @@
+{
+  "id": "18672258",
+  "nyplSource": "sierra-nypl",
+  "nyplType": "bib",
+  "updatedDate": "2019-03-14T01:47:09-04:00",
+  "createdDate": "2010-11-04T14:38:10-04:00",
+  "deletedDate": null,
+  "deleted": false,
+  "locations": [
+    {
+      "code": "huy",
+      "name": "115th Street Young Adult"
+    },
+    {
+      "code": "hdy",
+      "name": "125th Street Young Adult"
+    },
+    {
+      "code": "agy",
+      "name": "Aguilar Young Adult"
+    },
+    {
+      "code": "bay",
+      "name": "Baychester Young Adult"
+    },
+    {
+      "code": "cly",
+      "name": "Morningside Heights Young Adult"
+    },
+    {
+      "code": "csy",
+      "name": "Columbus Young Adult"
+    },
+    {
+      "code": "hpa",
+      "name": "Hudson Park Adult"
+    },
+    {
+      "code": "lmy",
+      "name": "New Amsterdam Young Adult"
+    },
+    {
+      "code": "mha",
+      "name": "Mott Haven Adult"
+    },
+    {
+      "code": "mm",
+      "name": "Mid-Manhattan Library at 42nd Street"
+    },
+    {
+      "code": "moy",
+      "name": "Mosholu Young Adult"
+    },
+    {
+      "code": "mry",
+      "name": "Morrisania Young Adult"
+    },
+    {
+      "code": "ndy",
+      "name": "New Dorp Young Adult"
+    },
+    {
+      "code": "oty",
+      "name": "Ottendorfer Young Adult"
+    },
+    {
+      "code": "rsa",
+      "name": "Riverside Adult"
+    },
+    {
+      "code": "svy",
+      "name": "Soundview Young Adult"
+    },
+    {
+      "code": "tgy",
+      "name": "Throg's Neck Young Adult"
+    },
+    {
+      "code": "wfa",
+      "name": "West Farms Adult"
+    }
+  ],
+  "suppressed": false,
+  "lang": {
+    "code": "eng",
+    "name": "English"
+  },
+  "title": "The lady killer [sound recording]",
+  "author": "Cee-Lo (Musician)",
+  "materialType": {
+    "code": "y",
+    "value": "MUSIC CD"
+  },
+  "bibLevel": {
+    "code": "m",
+    "value": "MONOGRAPH"
+  },
+  "publishYear": 2010,
+  "catalogDate": "2011-09-06",
+  "country": {
+    "code": "nyu",
+    "name": "New York (State)"
+  },
+  "normTitle": "lady killer sound recording",
+  "normAuthor": "cee lo musician",
+  "standardNumbers": [
+    "075678906015"
+  ],
+  "controlNumber": "668202922",
+  "fixedFields": {
+    "24": {
+      "label": "Language",
+      "value": "eng",
+      "display": "English"
+    },
+    "25": {
+      "label": "Skip",
+      "value": "4",
+      "display": null
+    },
+    "26": {
+      "label": "Location",
+      "value": "multi",
+      "display": null
+    },
+    "27": {
+      "label": "COPIES",
+      "value": "20",
+      "display": null
+    },
+    "28": {
+      "label": "Cat. Date",
+      "value": "2011-09-06",
+      "display": null
+    },
+    "29": {
+      "label": "Bib Level",
+      "value": "m",
+      "display": "MONOGRAPH"
+    },
+    "30": {
+      "label": "Material Type",
+      "value": "y",
+      "display": "MUSIC CD"
+    },
+    "31": {
+      "label": "Bib Code 3",
+      "value": "a",
+      "display": null
+    },
+    "80": {
+      "label": "Record Type",
+      "value": "b",
+      "display": null
+    },
+    "81": {
+      "label": "Record Number",
+      "value": "18672258",
+      "display": null
+    },
+    "83": {
+      "label": "Created Date",
+      "value": "2010-11-04T14:38:10Z",
+      "display": null
+    },
+    "84": {
+      "label": "Updated Date",
+      "value": "2019-03-14T01:47:09Z",
+      "display": null
+    },
+    "85": {
+      "label": "No. of Revisions",
+      "value": "1664",
+      "display": null
+    },
+    "86": {
+      "label": "Agency",
+      "value": "1",
+      "display": null
+    },
+    "89": {
+      "label": "Country",
+      "value": "nyu",
+      "display": "New York (State)"
+    },
+    "98": {
+      "label": "PDATE",
+      "value": "2019-03-11T14:41:55Z",
+      "display": null
+    },
+    "107": {
+      "label": "MARC Type",
+      "value": " ",
+      "display": null
+    }
+  },
+  "varFields": [
+    {
+      "fieldTag": "a",
+      "marcTag": "100",
+      "ind1": "0",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Cee-Lo"
+        },
+        {
+          "tag": "c",
+          "content": "(Musician)"
+        }
+      ]
+    },
+    {
+      "fieldTag": "b",
+      "marcTag": "700",
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Bennett, Lauren."
+        }
+      ]
+    },
+    {
+      "fieldTag": "c",
+      "marcTag": "091",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "f",
+          "content": "CD"
+        },
+        {
+          "tag": "a",
+          "content": "HIPHOP"
+        },
+        {
+          "tag": "c",
+          "content": "Cee-Lo-2922"
+        }
+      ]
+    },
+    {
+      "fieldTag": "d",
+      "marcTag": "650",
+      "ind1": " ",
+      "ind2": "0",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Rap (Music)"
+        }
+      ]
+    },
+    {
+      "fieldTag": "l",
+      "marcTag": "024",
+      "ind1": "1",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "075678906015"
+        }
+      ]
+    },
+    {
+      "fieldTag": "l",
+      "marcTag": "028",
+      "ind1": "0",
+      "ind2": "2",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "2-525601"
+        },
+        {
+          "tag": "b",
+          "content": "Elektra"
+        }
+      ]
+    },
+    {
+      "fieldTag": "l",
+      "marcTag": "035",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "(OCoLC)668202922"
+        },
+        {
+          "tag": "z",
+          "content": "(OCoLC)669068516"
+        },
+        {
+          "tag": "z",
+          "content": "(OCoLC)680057339"
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "511",
+      "ind1": "0",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Cee-Lo."
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "500",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Compact disc."
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "500",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "\"Parental advisory: explicit content\"--Container."
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "505",
+      "ind1": "0",
+      "ind2": "0",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "t",
+          "content": "The lady killer theme (intro) --"
+        },
+        {
+          "tag": "t",
+          "content": "Bright lights bigger city --"
+        },
+        {
+          "tag": "t",
+          "content": "F*** you --"
+        },
+        {
+          "tag": "t",
+          "content": "Wildflower --"
+        },
+        {
+          "tag": "t",
+          "content": "Bodies --"
+        },
+        {
+          "tag": "t",
+          "content": "Love gun"
+        },
+        {
+          "tag": "r",
+          "content": "(feat. Lauren Bennett) --"
+        },
+        {
+          "tag": "t",
+          "content": "Satisfied --"
+        },
+        {
+          "tag": "t",
+          "content": "I want you --"
+        },
+        {
+          "tag": "t",
+          "content": "Cry baby --"
+        },
+        {
+          "tag": "t",
+          "content": "Fool for you --"
+        },
+        {
+          "tag": "t",
+          "content": "It's OK --"
+        },
+        {
+          "tag": "t",
+          "content": "Old fashioned --"
+        },
+        {
+          "tag": "t",
+          "content": "No one's gonna love you --"
+        },
+        {
+          "tag": "t",
+          "content": "The lady killer theme (outro)."
+        }
+      ]
+    },
+    {
+      "fieldTag": "o",
+      "marcTag": "001",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "668202922",
+      "subfields": null
+    },
+    {
+      "fieldTag": "p",
+      "marcTag": "260",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "New York :"
+        },
+        {
+          "tag": "b",
+          "content": "NEK/New Elektra,"
+        },
+        {
+          "tag": "c",
+          "content": "p2010."
+        }
+      ]
+    },
+    {
+      "fieldTag": "r",
+      "marcTag": "300",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "1 sound disc :"
+        },
+        {
+          "tag": "b",
+          "content": "digital ;"
+        },
+        {
+          "tag": "c",
+          "content": "4 3/4 in."
+        }
+      ]
+    },
+    {
+      "fieldTag": "t",
+      "marcTag": "245",
+      "ind1": "1",
+      "ind2": "4",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "The lady killer"
+        },
+        {
+          "tag": "h",
+          "content": "[sound recording] /"
+        },
+        {
+          "tag": "c",
+          "content": "Cee-Lo."
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "003",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "OCoLC",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "005",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "20110414125717.0",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "007",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "sd fsngnnmmneu",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "008",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "101001s2010    nyuzznn           n eng dcjmIa ",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "019",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "669068516"
+        },
+        {
+          "tag": "a",
+          "content": "680057339"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "040",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "BTCTA"
+        },
+        {
+          "tag": "b",
+          "content": "eng"
+        },
+        {
+          "tag": "c",
+          "content": "BTCTA"
+        },
+        {
+          "tag": "d",
+          "content": "TEF"
+        },
+        {
+          "tag": "d",
+          "content": "TEFMT"
+        },
+        {
+          "tag": "d",
+          "content": "INO"
+        },
+        {
+          "tag": "d",
+          "content": "EHH"
+        },
+        {
+          "tag": "d",
+          "content": "RLS"
+        },
+        {
+          "tag": "d",
+          "content": "VP@"
+        },
+        {
+          "tag": "d",
+          "content": "IUL"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "037",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "b",
+          "content": "Midwest Tape"
+        },
+        {
+          "tag": "n",
+          "content": "http://www.midwesttapes.com"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "049",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "MAIN"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "050",
+      "ind1": " ",
+      "ind2": "4",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "M1630.18.C44"
+        },
+        {
+          "tag": "b",
+          "content": "L23 2010"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "908",
+      "ind1": " ",
+      "ind2": "4",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "M1630.18.C44"
+        },
+        {
+          "tag": "b",
+          "content": "L23 2010"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "082",
+      "ind1": "0",
+      "ind2": "4",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "782.42164"
+        },
+        {
+          "tag": "2",
+          "content": "22"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "901",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Midwest20110906"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "945",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": ".o14182324"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "901",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Midwest101122"
+        }
+      ]
+    },
+    {
+      "fieldTag": "_",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "00000cjm  2200421Ia 4500",
+      "subfields": null
+    }
+  ]
+}

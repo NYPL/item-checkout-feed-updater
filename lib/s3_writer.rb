@@ -27,14 +27,14 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             title = "\"#{checkout.title}\""
-            title += " by #{checkout.author}" if checkout.author
+            title += " by #{checkout.author}" if checkout.has? :author
             xml.title title
-            xml.link checkout.link
+            xml.link checkout.link if checkout.has? :link
             xml.updated checkout.created
-            xml['dcterms'].title checkout.title if checkout.title
-            xml['dc'].contributor checkout.author if checkout.author
-            xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.isbn
-            xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.barcode
+            xml['dcterms'].title checkout.title if checkout.has? :title
+            xml['dc'].contributor checkout.author if checkout.has? :author
+            xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
+            xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
           }
         end
       }

@@ -1,0 +1,252 @@
+{
+  "nyplSource": "sierra-nypl",
+  "bibIds": [
+    "18672258"
+  ],
+  "id": "25855062",
+  "nyplType": "item",
+  "updatedDate": "2019-04-10T20:52:48-04:00",
+  "createdDate": "2010-11-22T15:39:00-05:00",
+  "deletedDate": null,
+  "deleted": false,
+  "location": {
+    "code": "rsa0v",
+    "name": "Riverside Non-Print Media"
+  },
+  "status": {
+    "code": "-",
+    "display": "AVAILABLE",
+    "duedate": "2019-05-01T08:00:00+00:00"
+  },
+  "barcode": "33333289418770",
+  "callNumber": null,
+  "itemType": null,
+  "fixedFields": {
+    "57": {
+      "label": "BIB HOLD",
+      "value": "true",
+      "display": null
+    },
+    "58": {
+      "label": "Copy No.",
+      "value": "1",
+      "display": null
+    },
+    "59": {
+      "label": "Item Code 1",
+      "value": "0",
+      "display": null
+    },
+    "60": {
+      "label": "Item Code 2",
+      "value": "-",
+      "display": null
+    },
+    "61": {
+      "label": "Item Type",
+      "value": "233",
+      "display": "YA CD"
+    },
+    "62": {
+      "label": "Price",
+      "value": "1899.000000",
+      "display": null
+    },
+    "63": {
+      "label": "Checkout Date",
+      "value": "2019-03-21T15:42:25Z",
+      "display": null
+    },
+    "64": {
+      "label": "Checkout Location",
+      "value": "800",
+      "display": null
+    },
+    "65": {
+      "label": "Due Date",
+      "value": "2019-05-01T08:00:00Z",
+      "display": null
+    },
+    "66": {
+      "label": "Patron No.",
+      "value": "4776885",
+      "display": null
+    },
+    "68": {
+      "label": "Last Checkin",
+      "value": "2017-08-07T16:25:19Z",
+      "display": null
+    },
+    "70": {
+      "label": "Checkin Location",
+      "value": "391",
+      "display": null
+    },
+    "71": {
+      "label": "No. of Renewals",
+      "value": "1",
+      "display": null
+    },
+    "72": {
+      "label": "No. of Overdues",
+      "value": "0",
+      "display": null
+    },
+    "74": {
+      "label": "Item Use 3",
+      "value": "0",
+      "display": null
+    },
+    "76": {
+      "label": "Total Checkouts",
+      "value": "33",
+      "display": null
+    },
+    "77": {
+      "label": "Total Renewals",
+      "value": "11",
+      "display": null
+    },
+    "78": {
+      "label": "Last Checkout Date",
+      "value": "2017-07-27T22:34:25Z",
+      "display": null
+    },
+    "79": {
+      "label": "Location",
+      "value": "rsa0v",
+      "display": "Riverside Non-Print Media"
+    },
+    "80": {
+      "label": "Record Type",
+      "value": "i",
+      "display": null
+    },
+    "81": {
+      "label": "Record Number",
+      "value": "25855062",
+      "display": null
+    },
+    "83": {
+      "label": "Created Date",
+      "value": "2010-11-22T15:39:00Z",
+      "display": null
+    },
+    "84": {
+      "label": "Updated Date",
+      "value": "2019-04-10T20:52:48Z",
+      "display": null
+    },
+    "85": {
+      "label": "No. of Revisions",
+      "value": "186",
+      "display": null
+    },
+    "86": {
+      "label": "Agency",
+      "value": "1",
+      "display": null
+    },
+    "87": {
+      "label": "Loanrule",
+      "value": "4",
+      "display": null
+    },
+    "88": {
+      "label": "Status",
+      "value": "-",
+      "display": "AVAILABLE"
+    },
+    "93": {
+      "label": "Inhouse Use",
+      "value": "0",
+      "display": null
+    },
+    "94": {
+      "label": "Copy Use",
+      "value": "0",
+      "display": null
+    },
+    "97": {
+      "label": "Item Message",
+      "value": "-",
+      "display": null
+    },
+    "98": {
+      "label": "PDATE",
+      "value": "2019-04-08T00:59:21Z",
+      "display": null
+    },
+    "108": {
+      "label": "OPAC Message",
+      "value": "-",
+      "display": null
+    },
+    "109": {
+      "label": "Year-to-Date Circ",
+      "value": "1",
+      "display": null
+    },
+    "110": {
+      "label": "Last Year Circ",
+      "value": "1",
+      "display": null
+    },
+    "127": {
+      "label": "Item Agency",
+      "value": "0",
+      "display": "Undefined"
+    },
+    "161": {
+      "label": "VI Central",
+      "value": "0",
+      "display": null
+    },
+    "162": {
+      "label": "IR Dist Learn Same Site",
+      "value": "0",
+      "display": null
+    },
+    "264": {
+      "label": "Holdings Item Tag",
+      "value": "6",
+      "display": null
+    },
+    "265": {
+      "label": "Inherit Location",
+      "value": "false",
+      "display": null
+    },
+    "306": {
+      "label": "Sticky Status",
+      "value": " ",
+      "display": null
+    }
+  },
+  "varFields": [
+    {
+      "fieldTag": "b",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "33333289418770",
+      "subfields": null
+    },
+    {
+      "fieldTag": "t",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "Midwest",
+      "subfields": null
+    },
+    {
+      "fieldTag": "x",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "o13313551",
+      "subfields": null
+    }
+  ]
+}

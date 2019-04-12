@@ -46,7 +46,7 @@ class ItemStreamHandler
         decoded = avro_decoder('Item').decode avro_data
         
         # Presence of 'duedate' indicates it's checked-out
-        if ! decoded['status']['duedate'].nil?
+        if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
           add_checkout checkout
           

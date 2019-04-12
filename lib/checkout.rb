@@ -1,8 +1,14 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :catalog_url, :link
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
+  end
+
+  # Return true if named property (e.g. :title) is truthy
+  def has?(prop)
+    val = self.send prop
+    ! val.nil? && ! val.empty?
   end
 
   def self.marc_value(record, marc, subfield)

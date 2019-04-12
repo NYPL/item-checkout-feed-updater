@@ -1,0 +1,222 @@
+{
+  "nyplSource": "sierra-nypl",
+  "bibIds": [
+    "17990921"
+  ],
+  "id": "34132673",
+  "nyplType": "item",
+  "updatedDate": "2019-04-10T17:36:22-04:00",
+  "createdDate": "2016-06-06T19:20:00-04:00",
+  "deletedDate": null,
+  "deleted": false,
+  "location": {
+    "code": "sga0v",
+    "name": "St. George Non-Print Media"
+  },
+  "status": {
+    "code": "-",
+    "display": "AVAILABLE",
+    "duedate": null
+  },
+  "barcode": "33333406215299",
+  "callNumber": null,
+  "itemType": null,
+  "fixedFields": {
+    "57": {
+      "label": "BIB HOLD",
+      "value": "false",
+      "display": null
+    },
+    "58": {
+      "label": "Copy No.",
+      "value": "1",
+      "display": null
+    },
+    "59": {
+      "label": "Item Code 1",
+      "value": "0",
+      "display": null
+    },
+    "60": {
+      "label": "Item Code 2",
+      "value": "p",
+      "display": null
+    },
+    "61": {
+      "label": "Item Type",
+      "value": "128",
+      "display": "Wireless laptop"
+    },
+    "62": {
+      "label": "Price",
+      "value": "200000.000000",
+      "display": null
+    },
+    "64": {
+      "label": "Checkout Location",
+      "value": "79",
+      "display": null
+    },
+    "68": {
+      "label": "Last Checkin",
+      "value": "2019-04-10T17:36:22Z",
+      "display": null
+    },
+    "70": {
+      "label": "Checkin Location",
+      "value": "79",
+      "display": null
+    },
+    "74": {
+      "label": "Item Use 3",
+      "value": "0",
+      "display": null
+    },
+    "76": {
+      "label": "Total Checkouts",
+      "value": "183",
+      "display": null
+    },
+    "77": {
+      "label": "Total Renewals",
+      "value": "0",
+      "display": null
+    },
+    "78": {
+      "label": "Last Checkout Date",
+      "value": "2019-04-10T16:24:39Z",
+      "display": null
+    },
+    "79": {
+      "label": "Location",
+      "value": "sga0v",
+      "display": "St. George Non-Print Media"
+    },
+    "80": {
+      "label": "Record Type",
+      "value": "i",
+      "display": null
+    },
+    "81": {
+      "label": "Record Number",
+      "value": "34132673",
+      "display": null
+    },
+    "83": {
+      "label": "Created Date",
+      "value": "2016-06-06T19:20:00Z",
+      "display": null
+    },
+    "84": {
+      "label": "Updated Date",
+      "value": "2019-04-10T17:36:22Z",
+      "display": null
+    },
+    "85": {
+      "label": "No. of Revisions",
+      "value": "372",
+      "display": null
+    },
+    "86": {
+      "label": "Agency",
+      "value": "1",
+      "display": null
+    },
+    "88": {
+      "label": "Status",
+      "value": "-",
+      "display": "AVAILABLE"
+    },
+    "93": {
+      "label": "Inhouse Use",
+      "value": "0",
+      "display": null
+    },
+    "94": {
+      "label": "Copy Use",
+      "value": "0",
+      "display": null
+    },
+    "97": {
+      "label": "Item Message",
+      "value": "-",
+      "display": null
+    },
+    "98": {
+      "label": "PDATE",
+      "value": "2019-04-10T16:24:54Z",
+      "display": null
+    },
+    "108": {
+      "label": "OPAC Message",
+      "value": "1",
+      "display": null
+    },
+    "109": {
+      "label": "Year-to-Date Circ",
+      "value": "38",
+      "display": null
+    },
+    "110": {
+      "label": "Last Year Circ",
+      "value": "140",
+      "display": null
+    },
+    "127": {
+      "label": "Item Agency",
+      "value": "0",
+      "display": "Undefined"
+    },
+    "161": {
+      "label": "VI Central",
+      "value": "0",
+      "display": null
+    },
+    "162": {
+      "label": "IR Dist Learn Same Site",
+      "value": "0",
+      "display": null
+    },
+    "264": {
+      "label": "Holdings Item Tag",
+      "value": "6",
+      "display": null
+    },
+    "265": {
+      "label": "Inherit Location",
+      "value": "false",
+      "display": null
+    },
+    "306": {
+      "label": "Sticky Status",
+      "value": " ",
+      "display": null
+    }
+  },
+  "varFields": [
+    {
+      "fieldTag": "b",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "33333406215299",
+      "subfields": null
+    },
+    {
+      "fieldTag": "v",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "S-SG-LAP-TEN-40 ",
+      "subfields": null
+    },
+    {
+      "fieldTag": "x",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "Serial #        5CG5222DZZ;       A063309",
+      "subfields": null
+    }
+  ]
+}

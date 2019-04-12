@@ -1,0 +1,695 @@
+{
+  "id": "17990921",
+  "nyplSource": "sierra-nypl",
+  "nyplType": "bib",
+  "updatedDate": "2019-04-09T20:20:11-04:00",
+  "createdDate": "2009-02-14T02:49:00-05:00",
+  "deletedDate": null,
+  "deleted": false,
+  "locations": [
+    {
+      "code": "fta",
+      "name": "53rd Street Adult"
+    },
+    {
+      "code": "fea",
+      "name": "58th Street Adult"
+    },
+    {
+      "code": "ssa",
+      "name": "67th Street Adult"
+    },
+    {
+      "code": "nsa",
+      "name": "96th Street Adult"
+    },
+    {
+      "code": "hua",
+      "name": "115th Street Adult"
+    },
+    {
+      "code": "hda",
+      "name": "125th Street Adult"
+    },
+    {
+      "code": "aga",
+      "name": "Aguilar Adult"
+    },
+    {
+      "code": "ala",
+      "name": "Allerton Adult"
+    },
+    {
+      "code": "baa",
+      "name": "Baychester Adult"
+    },
+    {
+      "code": "bca",
+      "name": "Bronx Library Center Adult"
+    },
+    {
+      "code": "bea",
+      "name": "Belmont Adult"
+    },
+    {
+      "code": "bey",
+      "name": "Belmont Young Adult"
+    },
+    {
+      "code": "bla",
+      "name": "Bloomingdale Adult"
+    },
+    {
+      "code": "bra",
+      "name": "George Bruce Adult"
+    },
+    {
+      "code": "bta",
+      "name": "Battery Park Adult "
+    },
+    {
+      "code": "caa",
+      "name": "Terence Cardinal Cooke-Cathedral Adult"
+    },
+    {
+      "code": "cha",
+      "name": "Chatham Square Adult"
+    },
+    {
+      "code": "cia",
+      "name": "City Island Adult"
+    },
+    {
+      "code": "cla",
+      "name": "Morningside Heights Adult "
+    },
+    {
+      "code": "cpa",
+      "name": "Clason's Point Adult"
+    },
+    {
+      "code": "csa",
+      "name": "Columbus Adult "
+    },
+    {
+      "code": "cta",
+      "name": "Castle Hill Adult"
+    },
+    {
+      "code": "ctj",
+      "name": "Castle Hill Children"
+    },
+    {
+      "code": "dha",
+      "name": "Dongan Hills Adult"
+    },
+    {
+      "code": "dya",
+      "name": "Spuyten Duyvil Adult "
+    },
+    {
+      "code": "eaa",
+      "name": "Eastchester Adult"
+    },
+    {
+      "code": "epa",
+      "name": "Epiphany Adult"
+    },
+    {
+      "code": "ewa",
+      "name": "Edenwald Adult"
+    },
+    {
+      "code": "fwa",
+      "name": "Fort Washington Adult"
+    },
+    {
+      "code": "fxa",
+      "name": "Francis Martin Adult"
+    },
+    {
+      "code": "gca",
+      "name": "Grand Central Adult "
+    },
+    {
+      "code": "gda",
+      "name": "Grand Concourse Adult"
+    },
+    {
+      "code": "gka",
+      "name": "Great Kills Adult"
+    },
+    {
+      "code": "hba",
+      "name": "High Bridge Adult"
+    },
+    {
+      "code": "hfa",
+      "name": "Hamilton Fish Park Adult"
+    },
+    {
+      "code": "hga",
+      "name": "Hamilton Grange Adult"
+    },
+    {
+      "code": "hgy",
+      "name": "Hamilton Grange Young Adult"
+    },
+    {
+      "code": "hka",
+      "name": "Huguenot Park Adult"
+    },
+    {
+      "code": "hla",
+      "name": "Harlem Adult"
+    },
+    {
+      "code": "hpa",
+      "name": "Hudson Park Adult"
+    },
+    {
+      "code": "hpj",
+      "name": "Hudson Park Children"
+    },
+    {
+      "code": "hsa",
+      "name": "Hunt's Point Adult"
+    },
+    {
+      "code": "hta",
+      "name": "Countee Cullen Adult"
+    },
+    {
+      "code": "ina",
+      "name": "Inwood Adult"
+    },
+    {
+      "code": "jma",
+      "name": "Jefferson Market Adult"
+    },
+    {
+      "code": "jpa",
+      "name": "Jerome Park Adult"
+    },
+    {
+      "code": "kba",
+      "name": "Kingsbridge Adult"
+    },
+    {
+      "code": "kpa",
+      "name": "Kips Bay Adult"
+    },
+    {
+      "code": "lba",
+      "name": "Andrew Heiskell Adult"
+    },
+    {
+      "code": "lma",
+      "name": "New Amsterdam Adult"
+    },
+    {
+      "code": "ls",
+      "name": "Library Services Center"
+    },
+    {
+      "code": "mba",
+      "name": "Macomb's Bridge Adult"
+    },
+    {
+      "code": "mea",
+      "name": "Melrose Adult"
+    },
+    {
+      "code": "mha",
+      "name": "Mott Haven Adult"
+    },
+    {
+      "code": "mhar",
+      "name": "Mott Haven Adult Reference"
+    },
+    {
+      "code": "mla",
+      "name": "Mulberry Street Adult"
+    },
+    {
+      "code": "mm",
+      "name": "Mid-Manhattan Library at 42nd Street"
+    },
+    {
+      "code": "mma",
+      "name": "Mid-Manhattan Adult"
+    },
+    {
+      "code": "mna",
+      "name": "Mariner's Harbor Adult "
+    },
+    {
+      "code": "moa",
+      "name": "Mosholu Adult"
+    },
+    {
+      "code": "mpa",
+      "name": "Morris Park Adult"
+    },
+    {
+      "code": "mra",
+      "name": "Morrisania Adult"
+    },
+    {
+      "code": "mua",
+      "name": "Muhlenberg Adult"
+    },
+    {
+      "code": "mya",
+      "name": "Performing Arts - Adult"
+    },
+    {
+      "code": "nba",
+      "name": "West New Brighton Adult"
+    },
+    {
+      "code": "nda",
+      "name": "New Dorp Adult"
+    },
+    {
+      "code": "ota",
+      "name": "Ottendorfer Adult"
+    },
+    {
+      "code": "pka",
+      "name": "Parkchester Adult"
+    },
+    {
+      "code": "pma",
+      "name": "Pelham Bay Adult"
+    },
+    {
+      "code": "pra",
+      "name": "Port Richmond Adult"
+    },
+    {
+      "code": "rda",
+      "name": "Riverdale Adult"
+    },
+    {
+      "code": "ria",
+      "name": "Roosevelt Island Adult"
+    },
+    {
+      "code": "rsa",
+      "name": "Riverside Adult"
+    },
+    {
+      "code": "rta",
+      "name": "Richmondtown Adult"
+    },
+    {
+      "code": "saa",
+      "name": "St. Agnes Adult"
+    },
+    {
+      "code": "sba",
+      "name": "South Beach Adult"
+    },
+    {
+      "code": "sda",
+      "name": "Sedgwick Adult"
+    },
+    {
+      "code": "sea",
+      "name": "Seward Park Adult"
+    },
+    {
+      "code": "sga",
+      "name": "St. George Adult"
+    },
+    {
+      "code": "sta",
+      "name": "Stapleton Adult"
+    },
+    {
+      "code": "sva",
+      "name": "Soundview Adult"
+    },
+    {
+      "code": "tga",
+      "name": "Throg's Neck Adult"
+    },
+    {
+      "code": "tha",
+      "name": "Todt Hill-Westerleigh Adult"
+    },
+    {
+      "code": "thj",
+      "name": "Todt Hill-Westerleigh Children"
+    },
+    {
+      "code": "tma",
+      "name": "Tremont Adult"
+    },
+    {
+      "code": "tsa",
+      "name": "Tompkins Square Adult"
+    },
+    {
+      "code": "tva",
+      "name": "Tottenville Adult"
+    },
+    {
+      "code": "vca",
+      "name": "Van Cortlandt Adult"
+    },
+    {
+      "code": "vna",
+      "name": "Pelham Parkway-Van Nest Adult"
+    },
+    {
+      "code": "wba",
+      "name": "Webster Adult"
+    },
+    {
+      "code": "wfa",
+      "name": "West Farms Adult"
+    },
+    {
+      "code": "wha",
+      "name": "Washington Heights Adult"
+    },
+    {
+      "code": "wka",
+      "name": "Wakefield Adult"
+    },
+    {
+      "code": "wla",
+      "name": "Woodlawn Heights Adult"
+    },
+    {
+      "code": "woa",
+      "name": "Woodstock Adult"
+    },
+    {
+      "code": "wta",
+      "name": "Westchester Square Adult"
+    },
+    {
+      "code": "wtj",
+      "name": "Westchester Square Children"
+    },
+    {
+      "code": "yva",
+      "name": "Yorkville Adult"
+    },
+    {
+      "code": "scd",
+      "name": "Schomburg Center - Manuscripts & Archives"
+    },
+    {
+      "code": "scf",
+      "name": "Schomburg Center - Research & Reference"
+    },
+    {
+      "code": "mal",
+      "name": "SASB - Service Desk Rm 315"
+    }
+  ],
+  "suppressed": true,
+  "lang": {
+    "code": "eng",
+    "name": "English"
+  },
+  "title": "Laptops.",
+  "author": "",
+  "materialType": {
+    "code": "-",
+    "value": "MISC"
+  },
+  "bibLevel": {
+    "code": "m",
+    "value": "MONOGRAPH"
+  },
+  "publishYear": 9999,
+  "catalogDate": "2009-01-27",
+  "country": {
+    "code": "xx ",
+    "name": "Unknown or undetermined"
+  },
+  "normTitle": "laptops",
+  "normAuthor": "",
+  "standardNumbers": [],
+  "controlNumber": "",
+  "fixedFields": {
+    "24": {
+      "label": "Language",
+      "value": "eng",
+      "display": "English"
+    },
+    "25": {
+      "label": "Skip",
+      "value": "0",
+      "display": null
+    },
+    "26": {
+      "label": "Location",
+      "value": "multi",
+      "display": null
+    },
+    "27": {
+      "label": "COPIES",
+      "value": "1897",
+      "display": null
+    },
+    "28": {
+      "label": "Cat. Date",
+      "value": "2009-01-27",
+      "display": null
+    },
+    "29": {
+      "label": "Bib Level",
+      "value": "m",
+      "display": "MONOGRAPH"
+    },
+    "30": {
+      "label": "Material Type",
+      "value": "-",
+      "display": "MISC"
+    },
+    "31": {
+      "label": "Bib Code 3",
+      "value": "q",
+      "display": null
+    },
+    "80": {
+      "label": "Record Type",
+      "value": "b",
+      "display": null
+    },
+    "81": {
+      "label": "Record Number",
+      "value": "17990921",
+      "display": null
+    },
+    "83": {
+      "label": "Created Date",
+      "value": "2009-02-14T02:49:00Z",
+      "display": null
+    },
+    "84": {
+      "label": "Updated Date",
+      "value": "2019-04-09T20:20:11Z",
+      "display": null
+    },
+    "85": {
+      "label": "No. of Revisions",
+      "value": "262",
+      "display": null
+    },
+    "86": {
+      "label": "Agency",
+      "value": "1",
+      "display": null
+    },
+    "89": {
+      "label": "Country",
+      "value": "xx ",
+      "display": "Unknown or undetermined"
+    },
+    "98": {
+      "label": "PDATE",
+      "value": "2019-04-06T01:31:58Z",
+      "display": null
+    },
+    "107": {
+      "label": "MARC Type",
+      "value": " ",
+      "display": null
+    }
+  },
+  "varFields": [
+    {
+      "fieldTag": "c",
+      "marcTag": "091",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "LAPTOP"
+        }
+      ]
+    },
+    {
+      "fieldTag": "n",
+      "marcTag": "500",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Wireless laptop computers are available for in-library use by the public; they may also be used to support public and staff training workload responsibilities and other scheduled events. Governed by EnvisionWare, laptops may be checked-out for forty-five (45) minute sessions by eligible users of all ages."
+        }
+      ]
+    },
+    {
+      "fieldTag": "t",
+      "marcTag": "245",
+      "ind1": "0",
+      "ind2": "0",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Laptops."
+        }
+      ]
+    },
+    {
+      "fieldTag": "u",
+      "marcTag": "246",
+      "ind1": "3",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Circulating laptops"
+        }
+      ]
+    },
+    {
+      "fieldTag": "u",
+      "marcTag": "246",
+      "ind1": "3",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Wireless laptops"
+        }
+      ]
+    },
+    {
+      "fieldTag": "u",
+      "marcTag": "246",
+      "ind1": "3",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Laptops in the branches"
+        }
+      ]
+    },
+    {
+      "fieldTag": "u",
+      "marcTag": "246",
+      "ind1": "3",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "Laptop circulation"
+        }
+      ]
+    },
+    {
+      "fieldTag": "v",
+      "marcTag": "995",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "1622119"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "005",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "20090408123542.0",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "007",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "zu",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "008",
+      "ind1": " ",
+      "ind2": " ",
+      "content": "090312|99999999xx            |   zzeng||nrm a ",
+      "subfields": null
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "856",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "z",
+          "content": "Reserve a Laptop"
+        },
+        {
+          "tag": "u",
+          "content": "http://legacy.www.nypl.org/pcres/reserve.pl"
+        }
+      ]
+    },
+    {
+      "fieldTag": "y",
+      "marcTag": "901",
+      "ind1": " ",
+      "ind2": " ",
+      "content": null,
+      "subfields": [
+        {
+          "tag": "a",
+          "content": "jlb"
+        }
+      ]
+    },
+    {
+      "fieldTag": "_",
+      "marcTag": null,
+      "ind1": null,
+      "ind2": null,
+      "content": "00000nrm  2200133 a 4500",
+      "subfields": null
+    }
+  ]
+}

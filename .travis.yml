@@ -5,8 +5,8 @@ before_install:
 - sudo apt-get install -qq ruby2.5-dev
 install:
 - bundle install
-cache:
-- bundler
+  # cache:
+  # - bundler
 script:
 - LOG_LEVEL=error APP_ENV=test bundle exec rspec -f d
 deploy:

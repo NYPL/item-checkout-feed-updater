@@ -6,6 +6,8 @@ install:
   # - bundler
 script:
 - LOG_LEVEL=error APP_ENV=test bundle exec rspec -f d
+before_deploy:
+- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
 deploy:
 - provider: lambda
   function_name: ItemCheckoutFeedUpdater-qa

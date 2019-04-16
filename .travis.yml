@@ -16,7 +16,7 @@ deploy:
   runtime: ruby2.5
   module_name: application
   handler_name: handle_event
-  timeout: 10
+  timeout: 30
   environment_variables:
   - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
   - NYPL_OAUTH_URL=https://isso.nypl.org/
@@ -36,6 +36,7 @@ notifications:
     on_failure: always
 env:
   global:
+  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
   - AWS_DEFAULT_REGION=us-east-1
   - secure: tA/soIO8IiN/fqbvemLWWHUlcViKLrRJhMciWETz76q/FME6u+pBxwSVhLTSSednp84ucKO+OOnQJgTSGSwE7ddBh1yHGvKxeBspUg49GxBLXvbJomernjBROgvf1yt4is+ut8PBOZQAMKn6O75RGYo0lI9UWxXZm6CYMi2N6FnGl1soL1NyxQYz/MV38lAe3wf4CooehfuW/yOGnrFa4x5JRd1UWUfLXq31bIKJ2QQLFM2DWueKvt1twiT8Pt9eG9ur2sZzVkhUTvTO7ctzWH5h7oxwOLEFUvQA7gmGfgwt9VIxHUZkazF3u8z3QSXJk5yOG2deh7opUmIhL1XWt/HLKSP8caDkyu3nfo5pqB8bGz05B3dcllv/sTAn8dpQ0GP/5VHppvlP8qz6BQDIxWii5z2l3GXd/iM9DLktLadKlz2FC/9rnzLoHMyHMETCSTjXw6n+Qi8XETgs4qx9zIaryz/DuxY8XJ6qMI4dLOCzP162skbDw7GT1m0hBeEWWY9yqfMZhvg41JtUhD2BJyga4biI4SFt+MZwi7IU5qtqxJcWt9gFMaTmIP6286LSBmut5+oBuCo8pbjs7uSyIAyhMExMzxzHZyQ9eZ17kZs8oew0RzoipT5+S1MNjcBBTV63ENu9pr7OQG87UczqSCXqn5sTT7VLtm9B4lgW9zY=
   - secure: G7JJflWd7ThhU0AoyMTjUZzH22TCj/op1cWE8C2OVCjWtNVF44H3EuID+Ay5NdA4KJ/HrKCqmGbQekU4CXFzLLpuTgmrNdld30R6Jnd2siuOG54Rzsr37duTtlBTV4fOaug9z8KPRhjx6Lf6Nbh4ByBx9mlqVk+1XWgZWM8IdgJX67f2j2pWYkVDK0J+yOSLXbnYai8Is9PZB34VGVk3hpRWLN16pt2DEucIwOROuIout07iSugDDNOk+y6ABwPIdueKrZ5hpwmp8DX+NBEIlmrd4jKgP2j99Fzi6tzyBiIYiTaHLN4AI5dyyomACGxX77znmuthINYR2s+3cXDlu7PUfvGEUrq5PHpa6RMVzrmvN/45EqGS9ZW3KAtvs15Y0GOdO0a17oyWCKGLlQGJC9nyeKF8QndbaFL6B2D/FDO/vZm9aCHr9ngB8gCh8vGW+UkyRCT7NlBn/W9SQLoCgRWctiR7aDq9Sbb0ruj9PLpQRPX+bU+wxDiQmgPBR6WYzRTtKuUSsGmX8JRIeJaHH0O2pitZ72NEpK4r/xf8Eyc6WjClYaK40MSLCnJsQUsL6Pt/vYq4W2GkV1Z+OGO65xobf0V2RELBpNBUKeaWQdlkcubSQajZp1aJW281LWeU6K2ScYGelsICFNpLhJYFFcs/VlSJligf54l+ezekzLM=

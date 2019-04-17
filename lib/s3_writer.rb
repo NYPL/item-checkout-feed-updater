@@ -10,6 +10,20 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
+    # Determine min and max dates of checkouts
+    checkout_dates = checkouts.map { |checkout| checkout.created }.sort
+    min_date = Time.parse checkout_dates.first
+    max_date = Time.parse checkout_dates.last
+    # Determine seconds elapsed between first and last checkout
+    delta_seconds = max_date - min_date
+
+    # Generate random creation times over covered timespan:
+    creation_dates = Array.new(checkouts.size)
+      .map { |ind| rand delta_seconds }
+      .sort
+      .reverse
+      .map { |s| Time.at(Time.now - s).iso8601 }
+
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom", 
@@ -30,7 +44,8 @@ class S3Writer
             title += " by #{checkout.author}" if checkout.has? :author
             xml.title title
             xml.link checkout.link if checkout.has? :link
-            xml.updated checkout.created
+            # Assign somewhat random checkout time:
+            xml.updated creation_dates.shift
             xml['dcterms'].title checkout.title if checkout.has? :title
             xml['dc'].contributor checkout.author if checkout.has? :author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn

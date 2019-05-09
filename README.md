@@ -15,9 +15,15 @@ This app listens on the Item kinesis stream to identify Item updates that *look 
 ## Setup
 ### Installation
 
+1. Open a shell into the docker container:
+`docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bash`
+
+2. Bundle install:
+
 ```
 bundle install; bundle install --deployment
 ```
+3. `exit`
 
 ### Setup
 

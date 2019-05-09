@@ -1,5 +1,5 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
@@ -29,6 +29,7 @@ class Checkout
 
   def self.from_item_record(item)
     checkout = Checkout.new
+    checkout.item_type = item['fixedFields']['61']['value']
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']

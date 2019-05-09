@@ -26,7 +26,7 @@ class S3Writer
 
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
-        'xmlns' => "http://www.w3.org/2005/Atom", 
+        'xmlns' => "http://www.w3.org/2005/Atom",
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
         'xmlns:dcterms' => "http://purl.org/dc/terms/") {
 
@@ -50,6 +50,8 @@ class S3Writer
             xml['dc'].contributor checkout.author if checkout.has? :author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
+            xml.circulating checkout.circulating
+            xml.coarse_item_type checkout.coarse_item_type
           }
         end
       }

@@ -3,7 +3,7 @@ class Checkout
 
   @@item_types = {}
   File.open('./distinct_item_types_report.csv').each do |line|
-    matched = line.match(/(.*),(\d*),(\d*)/)
+    matched = line.match(/(.*),(\d*),(\w*)/)
     @@item_types[matched[2].to_i] = matched[3] if matched
   end
 
@@ -34,7 +34,7 @@ class Checkout
   end
 
   def self.map_item_types_to_coarse_item_types(item_type)
-    p @@item_types[item_type.to_i]
+    @@item_types[item_type.to_i]
   end
 
   def self.circulating?(item_type)

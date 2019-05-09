@@ -1,138 +1,138 @@
-"book, limited circ, MaRLI",55,9196464
-serial,3,4437707
-book non-circ,2,2023325
-J book,201,1309049
-"Book, paperback",102,907965
-J paperback,211,782572
-"Book, circ",101,759855
-microfilm service copy,6,552873
-DVD,111,478852
-"Leased book, 3-week",138,305382
-"Leased book 2-Week, New",136,259456
-YA paperback,238,213156
-preservation master negative,27,145666
-YA book,231,200479
-archival material,21,160135
-"google project, book",32,242587
-musical sound recording,12,132273
-J DVD,206,173923
-Compact disc,114,139266
-"book, poor condition, non-MaRLI",66,110344
-"Book, circ, 2-Week, New",117,116652
-"Reference non-circ Book,PER,etc.",104,95044
-bundled materials (vols.),29,97405
-"printed music, non-circ",7,137539
-"google project, serial",33,130191
-"serial, loose",4,84771
-Lpa score,108,72444
-archival video recording,24,66964
-J pre-k book,220,56044
-"pamphlets, singles, 1-50 pages",60,69127
-flat graphic,15,48007
-clipping files,22,57122
-printed music limited circ MaRLI,57,55143
-"Periodical, circ, serial",107,36097
-"pamphlet volumes, bound with",61,58584
-YA DVD,235,50198
-Recorded book,118,37070
-YA CD,233,38585
-map,9,34080
-"book, good condition, non-MaRLI",65,37138
-microfiche,26,28080
-archival sound recording,23,24090
-J reference,213,26658
-manuscript,20,20037
-Center for reading/writing,106,20455
-printing master negative,28,19622
-non-circ,1,21592
-default,0,13744
-DVD express,112,24534
-"Leased book, express",137,15925
-spoken sound recording,13,15710
-RFVC - FILM,132,11799
-Teacher Set (DOE EDUCATOR ONLY),252,9121
-i-archive/google monograph,52,14041
-J compact disc,203,14273
-master recording,37,11764
-atlas,25,11529
-computer file,16,8111
-"videorecording, non-circ",11,8708
-J periodical,212,8049
-RFVC - VHS,134,5750
-J recorded book,202,7031
-moving image,14,7234
-Clear WiFi Access Point,150,4513
-manuscript music,8,4333
-J mixed media set,209,3853
-RFVC - DVD,135,2654
-"serial, loose, 1 hour",5,2720
-"internet archive, book",42,3898
-Lpa song index score,109,3865
-micro-opaque,34,4135
-Blu-ray,140,2470
-"cd-rom, dvd-rom",35,3263
-Borrowed ILL,129,1974
-Wireless laptop,128,2178
-Lpa orchestra collection,144,2466
-YA recorded book,232,1980
-YA periodical,239,3000
-RFVC - FILM PRESERVATION,133,1134
-,221,1131
-Picture,120,2033
-"ELL book, iZone at AG,IN,MH,SE",143,1978
-Mixed media set,121,1562
-J Blu-ray,217,1124
-J DVD express,216,1084
-mixed medium collection,18,1228
-VHS,110,1288
-Adult fast add item,131,832
-YA game express,236,678
-"Book, express",103,659
-Chrome book,139,522
-YA DVD express,230,436
-,152,312
-Cd express,115,299
-J cd-rom,204,357
-Interlibrary Loan - Research,79,186
-VCD,113,252
-,222,165
-J game express,208,177
-J videocassette,215,171
-i-archive/google serial,53,189
-Cd-rom,122,213
-3-D object,19,160
-offsite requesting (ncip),50,95
-Equipment,130,109
-Game express,123,95
-art and artifacts,38,121
-YA Blu-ray,240,79
-Pamphlet,105,90
-Audiocassette,116,84
-"printed music, good, non-MaRLI",67,60
-YA CD express,234,61
-J fast add item,207,61
-J audiocassette,205,37
-YA pamphlet,237,42
-loose newspaper,30,42
-J software,214,31
-"internet archive, serial",43,31
-kit,17,38
-,151,21
-"internet archive, non-circ",41,14
-www based,36,23
-,146,12
-,147,12
-Software,119,10
-RFVC - LPA Blu-ray,142,9
-i-archive/google non-circ,51,14
-,153,9
-"google project, non-circ",31,16
-"map, manuscript",10,10
-J ELL book at AG IN MH SE,219,5
-J long playing record,210,6
-"printed music, poor, non-MaRLI",68,4
-,78,4
-E-nypl audio book,125,2
-,92,1
-E-nypl music,126,1
-Blu-ray express,141,1
+"book, limited circ, MaRLI",55,Book,
+serial,3,Serial,
+book non-circ,2,Book,
+J book,201,Book,
+"Book, paperback",102,Book,
+J paperback,211,Book,
+"Book, circ",101,Book,
+microfilm service copy,6,Image,?
+DVD,111,AV,
+"Leased book, 3-week",138,Book,
+"Leased book 2-Week, New",136,Book,
+YA paperback,238,Book,
+preservation master negative,27,Image,?
+YA book,231,Book,
+archival material,21,Archival,?
+"google project, book",32,Book,?
+musical sound recording,12,AV,
+J DVD,206,AV,
+Compact disc,114,AV,
+"book, poor condition, non-MaRLI",66,Book,
+"Book, circ, 2-Week, New",117,Book,
+"Reference non-circ Book,PER,etc.",104,Book,?
+bundled materials (vols.),29,Book,?
+"printed music, non-circ",7,Music,
+"google project, serial",33,Serial,?
+"serial, loose",4,Serial,
+Lpa score,108,Music,
+archival video recording,24,AV,
+J pre-k book,220,Book,
+"pamphlets, singles, 1-50 pages",60,Book,?
+flat graphic,15,Image,
+clipping files,22,Clipping,
+printed music limited circ MaRLI,57,Music,
+"Periodical, circ, serial",107,Serial,
+"pamphlet volumes, bound with",61,Book,?
+YA DVD,235,AV,
+Recorded book,118,Book,?
+YA CD,233,AV,
+map,9,Image,?
+"book, good condition, non-MaRLI",65,Book,
+microfiche,26,Image,?
+archival sound recording,23,Music,
+J reference,213,Book,?
+manuscript,20,Book,?
+Center for reading/writing,106,Book,?
+printing master negative,28,Image,?
+non-circ,1,Other,
+default,0,Other,
+DVD express,112,AV,
+"Leased book, express",137,Book,
+spoken sound recording,13,AV,
+RFVC - FILM,132,AV,
+Teacher Set (DOE EDUCATOR ONLY),252,Other,
+i-archive/google monograph,52,Other,
+J compact disc,203,AV,
+master recording,37,AV,
+atlas,25,Book,?
+computer file,16,AV,?
+"videorecording, non-circ",11,AV,
+J periodical,212,Serial,
+RFVC - VHS,134,AV,
+J recorded book,202,AV,?
+moving image,14,AV,
+Clear WiFi Access Point,150,Device,
+manuscript music,8,Music,
+J mixed media set,209,AV,?
+RFVC - DVD,135,AV,?
+"serial, loose, 1 hour",5,Serial,
+"internet archive, book",42,Book,
+Lpa song index score,109,Music,
+micro-opaque,34,Other,
+Blu-ray,140,AV,?
+"cd-rom, dvd-rom",35,AV,
+Borrowed ILL,129,Other,
+Wireless laptop,128,Device,
+Lpa orchestra collection,144,Music,
+YA recorded book,232,AV,
+YA periodical,239,Serial,
+RFVC - FILM PRESERVATION,133,AV,
+,221,Other,
+Picture,120,Image,
+"ELL book, iZone at AG,IN,MH,SE",143,Book,
+Mixed media set,121,AV,
+J Blu-ray,217,AV,
+J DVD express,216,AV,
+mixed medium collection,18,AV,
+VHS,110,AV,
+Adult fast add item,131,Other,
+YA game express,236,AV,
+"Book, express",103,Book,
+Chrome book,139,Device,
+YA DVD express,230,AV,
+,152,Other,
+Cd express,115,AV,
+J cd-rom,204,AV,
+Interlibrary Loan - Research,79,Other,
+VCD,113,AV,
+,222,Other,
+J game express,208,AV,
+J videocassette,215,AV,
+i-archive/google serial,53,Serial,
+Cd-rom,122,AV,
+3-D object,19,Object,
+offsite requesting (ncip),50,Other,
+Equipment,130,Object,
+Game express,123,AV,
+art and artifacts,38,Object,
+YA Blu-ray,240,AV,
+Pamphlet,105,Book,
+Audiocassette,116,AV,
+"printed music, good, non-MaRLI",67,Music,
+YA CD express,234,AV,
+J fast add item,207,Other,
+J audiocassette,205,AV,
+YA pamphlet,237,Book,
+loose newspaper,30,Serial,
+J software,214,Other,
+"internet archive, serial",43,Serial,
+kit,17,Object,
+,151,Other,
+"internet archive, non-circ",41,Other,
+www based,36,AV,
+,146,Other,
+,147,Other,
+Software,119,Other,
+RFVC - LPA Blu-ray,142,AV,
+i-archive/google non-circ,51,Other,
+,153,Other,
+"google project, non-circ",31,Other,
+"map, manuscript",10,Image,
+J ELL book at AG IN MH SE,219,Book,
+J long playing record,210,AV,
+"printed music, poor, non-MaRLI",68,Music,
+,78,Other,
+E-nypl audio book,125,AV,
+,92,Other,
+E-nypl music,126,Music,
+Blu-ray express,141,AV,

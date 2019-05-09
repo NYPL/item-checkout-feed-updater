@@ -1,5 +1,5 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :circulating
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
@@ -27,9 +27,19 @@ class Checkout
     nil
   end
 
+  def self.map_item_types_to_coarse_item_types(item_type)
+    
+  end
+
+  def self.circulating?(item_type)
+    item_type.to_i >= 100
+  end
+
   def self.from_item_record(item)
     checkout = Checkout.new
     checkout.item_type = item['fixedFields']['61']['value']
+    checkout.coarse_item_type = self.map_item_types_to_coarse_item_types checkout.item_type
+    checkout.circulating = self.circulating? checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']

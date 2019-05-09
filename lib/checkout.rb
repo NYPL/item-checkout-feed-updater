@@ -1,6 +1,12 @@
 class Checkout
   attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :circulating
 
+  @@item_types = {}
+  File.open('./distinct_item_types_report.csv').each do |line|
+    matched = line.match(/(.*),(\d*),(\d*)/)
+    @@item_types[matched[2].to_i] = matched[1] if matched
+  end
+  
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
   end
@@ -28,7 +34,7 @@ class Checkout
   end
 
   def self.map_item_types_to_coarse_item_types(item_type)
-    
+    @@item_types[item_type.to_i]
   end
 
   def self.circulating?(item_type)

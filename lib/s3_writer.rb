@@ -37,9 +37,10 @@ class S3Writer
         }
         xml.id "urn:nypl:item-checkout-feed"
         xml.updated Time.now
-        xml.tallies {
+        xml['nypl'].tallies {
           ItemTypeTally[:tallies].keys.each do |category|
-            xml.send(category, ItemTypeTally[:tallies][category])
+            xml['nypl'].tally({category.to_sym => ''}, ItemTypeTally[:tallies][category])
+            # xml['nypl'].send(category, ItemTypeTally[:tallies][category])
           end
         }
 

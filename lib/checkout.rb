@@ -1,5 +1,13 @@
+require_relative './util.rb'
+
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :location_type
+
+  @@item_types = {}
+  File.open('./distinct_item_types_report.csv').each do |line|
+    matched = line.match(/(.*),(\d*),(\w*)/)
+    @@item_types[matched[2].to_i] = matched[3] if matched
+  end
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"
@@ -9,6 +17,14 @@ class Checkout
   def has?(prop)
     val = self.send prop
     ! val.nil? && ! val.empty?
+  end
+
+  def categories
+    subs({ "locationType" => location_type, "coarseItemType" => coarse_item_type })
+  end
+
+  def tallies
+    @tallies ||= Hash.new{|h,k| h[k] = 0}
   end
 
   def self.marc_value(record, marc, subfield)
@@ -27,8 +43,19 @@ class Checkout
     nil
   end
 
+  def self.map_item_type_to_coarse_item_type(item_type)
+    @@item_types[item_type.to_i]
+  end
+
+  def self.location_type(item_type)
+    item_type.to_i >= 100 ? 'Branch' : 'Research'
+  end
+
   def self.from_item_record(item)
     checkout = Checkout.new
+    checkout.item_type = item['fixedFields']['61']['value']
+    checkout.coarse_item_type = self.map_item_type_to_coarse_item_type checkout.item_type
+    checkout.location_type = self.location_type checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']

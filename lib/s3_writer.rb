@@ -26,9 +26,10 @@ class S3Writer
 
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
-        'xmlns' => "http://www.w3.org/2005/Atom", 
+        'xmlns' => "http://www.w3.org/2005/Atom",
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
-        'xmlns:dcterms' => "http://purl.org/dc/terms/") {
+        'xmlns:dcterms' => "http://purl.org/dc/terms/",
+        'xmlns:nypl' => "http://nypl.org/") {
 
         xml.title "Latest NYPL Checkouts"
         xml.author {
@@ -36,6 +37,11 @@ class S3Writer
         }
         xml.id "urn:nypl:item-checkout-feed"
         xml.updated Time.now
+        xml['nypl'].tallies {
+          ItemTypeTally[:tallies].keys.each do |category|
+            xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
+          end
+        }
 
         checkouts.each do |checkout|
           xml.entry {
@@ -50,6 +56,13 @@ class S3Writer
             xml['dc'].contributor checkout.author if checkout.has? :author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
+            xml['nypl'].locationType checkout.location_type
+            xml['nypl'].coarseItemType checkout.coarse_item_type
+            xml['nypl'].indexes {
+              checkout.tallies.keys.each do |category|
+                xml['nypl'].index(category, checkout.tallies[category])
+              end
+            }
           }
         end
       }

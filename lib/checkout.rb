@@ -1,5 +1,5 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :circulating
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :collection
 
   @@item_types = {}
   File.open('./distinct_item_types_report.csv').each do |line|

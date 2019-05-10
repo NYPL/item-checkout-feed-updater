@@ -1,3 +1,5 @@
+require './util.rb'
+
 class Checkout
   attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :location_type
 
@@ -17,8 +19,8 @@ class Checkout
     ! val.nil? && ! val.empty?
   end
 
-  def category
-    "#{coarse_item_type}_#{location_type}"
+  def categories
+    subs({ "LocationType" => location_type, "coarseItemType" => coarse_item_type })
   end
 
   def self.marc_value(record, marc, subfield)

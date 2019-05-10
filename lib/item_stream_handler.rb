@@ -41,7 +41,9 @@ class ItemStreamHandler
   end
 
   def update_count(checkout)
-    ItemTypeTally[:tallies][checkout.category] += 1
+    checkout.categories.each do |category|
+      ItemTypeTally[:tallies][category] += 1
+    end
   end
 
 

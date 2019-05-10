@@ -39,7 +39,7 @@ class S3Writer
         xml.updated Time.now
         xml['nypl'].tallies {
           ItemTypeTally[:tallies].keys.each do |category|
-            xml['nypl'].tally({category.to_sym => ''}, ItemTypeTally[:tallies][category])
+            xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
             # xml['nypl'].send(category, ItemTypeTally[:tallies][category])
           end
         }

@@ -9,63 +9,74 @@ class S3Writer
     @s3_client
   end
 
-  def feed_xml(checkouts)
+  def delta_seconds(checkouts)
     # Determine min and max dates of checkouts
     checkout_dates = checkouts.map { |checkout| checkout.created }.sort
     min_date = Time.parse checkout_dates.first
     max_date = Time.parse checkout_dates.last
     # Determine seconds elapsed between first and last checkout
-    delta_seconds = max_date - min_date
+    max_date - min_date
+  end
 
+  def creation_dates(checkouts)
     # Generate random creation times over covered timespan:
-    creation_dates = Array.new(checkouts.size)
-      .map { |ind| rand delta_seconds }
-      .sort
-      .reverse
-      .map { |s| Time.at(Time.now - s).iso8601 }
+    @creation_dates ||= Array.new(checkouts.size)
+    .map { |ind| rand delta_seconds(checkouts) }
+    .sort
+    .reverse
+    .map { |s| Time.at(Time.now - s).iso8601 }
+  end
 
-    builder = Nokogiri::XML::Builder.new do |xml|
-      xml.feed(
-        'xmlns' => "http://www.w3.org/2005/Atom",
-        'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
-        'xmlns:dcterms' => "http://purl.org/dc/terms/",
-        'xmlns:nypl' => "http://nypl.org/") {
-
+  def assign_xml_properties(xml)
+    xml.feed(
+      'xmlns' => "http://www.w3.org/2005/Atom",
+      'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
+      'xmlns:dcterms' => "http://purl.org/dc/terms/",
+      'xmlns:nypl' => "http://nypl.org/") {
         xml.title "Latest NYPL Checkouts"
         xml.author {
           xml.name "NYPL Digital"
         }
-        xml.id "urn:nypl:item-checkout-feed"
-        xml.updated Time.now
-        xml['nypl'].tallies {
-          ItemTypeTally[:tallies].keys.each do |category|
-            xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
-          end
-        }
+    }
+    xml.id "urn:nypl:item-checkout-feed"
+    xml.updated Time.now
+    xml['nypl'].tallies {
+      ItemTypeTally[:tallies].keys.each do |category|
+        xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
+      end
+    }
+  end
 
-        checkouts.each do |checkout|
-          xml.entry {
-            xml.id "#{checkout.id}-#{checkout.barcode}"
-            title = "\"#{checkout.title}\""
-            title += " by #{checkout.author}" if checkout.has? :author
-            xml.title title
-            xml.link checkout.link if checkout.has? :link
-            # Assign somewhat random checkout time:
-            xml.updated creation_dates.shift
-            xml['dcterms'].title checkout.title if checkout.has? :title
-            xml['dc'].contributor checkout.author if checkout.has? :author
-            xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
-            xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
-            xml['nypl'].locationType checkout.location_type
-            xml['nypl'].coarseItemType checkout.coarse_item_type
-            xml['nypl'].indexes {
-              checkout.tallies.keys.each do |category|
-                xml['nypl'].index(category, checkout.tallies[category])
-              end
-            }
-          }
+  def assign_checkout_properties(checkout, xml)
+    xml.entry {
+      xml.id "#{checkout.id}-#{checkout.barcode}"
+      title = "\"#{checkout.title}\""
+      title += " by #{checkout.author}" if checkout.has? :author
+      xml.title title
+      xml.link checkout.link if checkout.has? :link
+      # Assign somewhat random checkout time:
+      xml.updated @creation_dates.shift
+      xml['dcterms'].title checkout.title if checkout.has? :title
+      xml['dc'].contributor checkout.author if checkout.has? :author
+      xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
+      xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
+      xml['nypl'].locationType checkout.location_type
+      xml['nypl'].coarseItemType checkout.coarse_item_type
+      xml['nypl'].indexes {
+        checkout.tallies.keys.each do |category|
+          xml['nypl'].index(category, checkout.tallies[category])
         end
       }
+    }
+  end
+
+  def feed_xml(checkouts)
+
+    builder = Nokogiri::XML::Builder.new do |xml|
+      assign_xml_properties(xml)
+      checkouts.each do |checkout|
+        assign_checkout_properties(checkout, xml)
+      end
     end
 
     Application.logger.debug "Entry #{builder.to_xml}"

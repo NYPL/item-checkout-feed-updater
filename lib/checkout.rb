@@ -18,7 +18,7 @@ class Checkout
   end
 
   def category
-    "#{coarse_item_type}_#{circulating ? 'circulating' : 'non-circulating'}"
+    "#{coarse_item_type}_#{collection}"
   end
 
   def self.marc_value(record, marc, subfield)

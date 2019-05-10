@@ -28,8 +28,8 @@ class S3Writer
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
-        'xmlns:dcterms' => "http://purl.org/dc/terms/"
-        'xmlns:nypl' => 'http://nypl.org') {
+        'xmlns:dcterms' => "http://purl.org/dc/terms/",
+        'xmlns:nypl' => "http://nypl.org/") {
 
         xml.title "Latest NYPL Checkouts"
         xml.author {

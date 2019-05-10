@@ -1,4 +1,4 @@
-require './util.rb'
+require_relative './util.rb'
 
 class Checkout
   attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :location_type

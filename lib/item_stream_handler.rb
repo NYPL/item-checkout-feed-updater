@@ -34,7 +34,7 @@ class ItemStreamHandler
   end
 
   def update_tally_if_necessary
-    if Time.now - ItemTypeTally[:time] >= 24*60*60
+    if Time.now.day != ItemTypeTally[:time].day
       ItemTypeTally[:time] = Time.now
       ItemTypeTally[:tallies] = Hash.new {|h,k| h[k] = 0}
     end

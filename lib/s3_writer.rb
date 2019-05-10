@@ -36,6 +36,9 @@ class S3Writer
         }
         xml.id "urn:nypl:item-checkout-feed"
         xml.updated Time.now
+        ItemTypeTally[:tallies].keys.each do |category|
+          xml.send(category, ItemTypeTally[:tallies][category])
+        end
 
         checkouts.each do |checkout|
           xml.entry {

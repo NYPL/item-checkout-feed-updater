@@ -37,19 +37,19 @@ class Checkout
     nil
   end
 
-  def self.map_item_types_to_coarse_item_types(item_type)
+  def self.map_item_type_to_coarse_item_type(item_type)
     @@item_types[item_type.to_i]
   end
 
-  def self.circulating?(item_type)
+  def self.collection_type(item_type)
     item_type.to_i >= 100 ? 'circulating' : 'non-circulating'
   end
 
   def self.from_item_record(item)
     checkout = Checkout.new
     checkout.item_type = item['fixedFields']['61']['value']
-    checkout.coarse_item_type = self.map_item_types_to_coarse_item_types checkout.item_type
-    checkout.collection = self.circulating? checkout.item_type
+    checkout.coarse_item_type = self.map_item_type_to_coarse_item_type checkout.item_type
+    checkout.collection = self.collection_type checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']

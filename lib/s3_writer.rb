@@ -39,6 +39,12 @@ class S3Writer
     title
   end
 
+  def generate_tallies(xml)
+    ItemTypeTally[:tallies].keys.each do |category|
+      xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
+    end
+  end
+
   def assign_checkout_properties(checkout, xml)
     xml.entry {
       xml.id "#{checkout.id}-#{checkout.barcode}"
@@ -70,11 +76,7 @@ class S3Writer
           }
           xml.id "urn:nypl:item-checkout-feed"
           xml.updated Time.now
-          xml['nypl'].tallies {
-            ItemTypeTally[:tallies].keys.each do |category|
-              xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
-            end
-          }
+          xml['nypl'].tallies { generate_tallies(xml) }
           checkouts.each do |checkout|
             assign_checkout_properties(checkout, xml)
           end

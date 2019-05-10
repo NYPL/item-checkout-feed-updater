@@ -20,7 +20,7 @@ class Checkout
   end
 
   def categories
-    subs({ "LocationType" => location_type, "coarseItemType" => coarse_item_type })
+    subs({ "locationType" => location_type, "coarseItemType" => coarse_item_type })
   end
 
   def self.marc_value(record, marc, subfield)

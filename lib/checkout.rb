@@ -1,5 +1,5 @@
 class Checkout
-  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :collection
+  attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link, :item_type, :coarse_item_type, :location_type
 
   @@item_types = {}
   File.open('./distinct_item_types_report.csv').each do |line|
@@ -18,7 +18,7 @@ class Checkout
   end
 
   def category
-    "#{coarse_item_type}_#{collection}"
+    "#{coarse_item_type}_#{location_type}"
   end
 
   def self.marc_value(record, marc, subfield)
@@ -41,15 +41,15 @@ class Checkout
     @@item_types[item_type.to_i]
   end
 
-  def self.collection_type(item_type)
-    item_type.to_i >= 100 ? 'circulating' : 'non-circulating'
+  def self.location_type(item_type)
+    item_type.to_i >= 100 ? 'Branch' : 'Research'
   end
 
   def self.from_item_record(item)
     checkout = Checkout.new
     checkout.item_type = item['fixedFields']['61']['value']
     checkout.coarse_item_type = self.map_item_type_to_coarse_item_type checkout.item_type
-    checkout.collection = self.collection_type checkout.item_type
+    checkout.location_type = self.location_type checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']

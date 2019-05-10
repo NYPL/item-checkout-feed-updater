@@ -28,7 +28,8 @@ class S3Writer
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",
         'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
-        'xmlns:dcterms' => "http://purl.org/dc/terms/") {
+        'xmlns:dcterms' => "http://purl.org/dc/terms/"
+        'xmlns:nypl' => 'http://nypl.org') {
 
         xml.title "Latest NYPL Checkouts"
         xml.author {
@@ -55,8 +56,8 @@ class S3Writer
             xml['dc'].contributor checkout.author if checkout.has? :author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
-            xml.collection checkout.collection
-            xml.coarse_item_type checkout.coarse_item_type
+            xml['nypl'].locationType checkout.location_type
+            xml['nypl'].coarseItemType checkout.coarse_item_type
           }
         end
       }

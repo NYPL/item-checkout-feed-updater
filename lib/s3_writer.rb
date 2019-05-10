@@ -28,23 +28,7 @@ class S3Writer
   end
 
   def assign_xml_properties(xml)
-    xml.feed(
-      'xmlns' => "http://www.w3.org/2005/Atom",
-      'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
-      'xmlns:dcterms' => "http://purl.org/dc/terms/",
-      'xmlns:nypl' => "http://nypl.org/") {
-        xml.title "Latest NYPL Checkouts"
-        xml.author {
-          xml.name "NYPL Digital"
-        }
-      }
-    xml.id "urn:nypl:item-checkout-feed"
-    xml.updated Time.now
-    xml['nypl'].tallies {
-      ItemTypeTally[:tallies].keys.each do |category|
-        xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
-      end
-    }
+
   end
 
   def assign_checkout_properties(checkout, xml)
@@ -71,12 +55,28 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-
+    creation_dates(checkouts)
     builder = Nokogiri::XML::Builder.new do |xml|
-      assign_xml_properties(xml)
-      checkouts.each do |checkout|
-        assign_checkout_properties(checkout, xml)
-      end
+      xml.feed(
+        'xmlns' => "http://www.w3.org/2005/Atom",
+        'xmlns:dc' => "http://purl.org/dc/elements/1.1/",
+        'xmlns:dcterms' => "http://purl.org/dc/terms/",
+        'xmlns:nypl' => "http://nypl.org/") {
+          xml.title "Latest NYPL Checkouts"
+          xml.author {
+            xml.name "NYPL Digital"
+          }
+          xml.id "urn:nypl:item-checkout-feed"
+          xml.updated Time.now
+          xml['nypl'].tallies {
+            ItemTypeTally[:tallies].keys.each do |category|
+              xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
+            end
+          }
+          checkouts.each do |checkout|
+            assign_checkout_properties(checkout, xml)
+          end
+        }
     end
 
     Application.logger.debug "Entry #{builder.to_xml}"

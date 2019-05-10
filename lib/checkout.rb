@@ -27,20 +27,26 @@ class Checkout
     @tallies ||= Hash.new{|h,k| h[k] = 0}
   end
 
-  def self.marc_value(record, marc, subfield)
-    var_block = record['varFields']
+  def self.var_block(record, marc)
+    record['varFields']
       .select { |field| field['marcTag'] == marc }
       .first
-    if ! var_block.nil?
-      subfield_block = var_block['subfields']
-        .select { |subfield_b| subfield_b['tag'] == subfield }
-        .first
-      if ! subfield_block.nil?
-        return subfield_block['content']
-      end
-    end
+  end
 
-    nil
+  def self.subfield_block(var_block, subfield)
+    var_block && var_block['subfields']
+      .select { |subfield_b| subfield_b['tag'] == subfield }
+      .first
+  end
+
+  def self.subfield_block_content(subfield_block)
+    subfield_block && subfield_block['content']
+  end
+
+  def self.marc_value(record, marc, subfield)
+    var_block = self.var_block(record, marc)
+    subfield_block = self.subfield_block(var_block, subfield)
+    self.subfield_block_content subfield_block
   end
 
   def self.map_item_type_to_coarse_item_type(item_type)
@@ -51,31 +57,43 @@ class Checkout
     item_type.to_i >= 100 ? 'Branch' : 'Research'
   end
 
-  def self.from_item_record(item)
-    checkout = Checkout.new
+  def self.initial_checkout_property_assignment(item, checkout)
     checkout.item_type = item['fixedFields']['61']['value']
     checkout.coarse_item_type = self.map_item_type_to_coarse_item_type checkout.item_type
     checkout.location_type = self.location_type checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
     checkout.created = item['updatedDate']
+  end
 
-    if item['bibIds'].is_a?(Array) && ! item['bibIds'].empty?
-      response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"
-      if response && response['data']
-        bib = response['data']
-        Application.logger.debug "Got bib for item #{item['id']}: #{bib.to_json}"
+  def self.assign_isbn(bib, checkout)
+    # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
+    checkout.isbn = self.marc_value bib, '020', 'a'
+    checkout.isbn.gsub! /\s\(.*/, '' if !checkout.isbn.nil?
+  end
 
-        checkout.title = bib['title']
-        checkout.author = bib['author']
-        checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
+  def self.checkout_bib_property_assignment(bib, checkout, item)
+    return unless bib
+    checkout.title = bib['title']
+    checkout.author = bib['author']
+    self.assign_isbn(bib, checkout)
+    checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
+  end
 
-        # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
-        checkout.isbn = self.marc_value bib, '020', 'a'
-        checkout.isbn.gsub! /\s\(.*/, '' if !checkout.isbn.nil?
-      end
-    end
+  def self.get_bib(item)
+    return nil unless item['bibIds'].is_a?(Array) && !item['bibIds'].empty?
+    response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"
+    return nil unless response && response['data']
+    bib = response['data']
+    Application.logger.debug "Got bib for item #{item['id']}: #{bib.to_json}"
+    bib
+  end
 
+  def self.from_item_record(item)
+    checkout = Checkout.new
+    self.initial_checkout_property_assignment(item, checkout)
+    bib = self.get_bib(item)
+    self.checkout_bib_property_assignment(bib, checkout, item)
     checkout
   end
 end

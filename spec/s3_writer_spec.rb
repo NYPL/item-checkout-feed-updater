@@ -75,8 +75,11 @@ describe S3Writer do
       get_author_valid_string = S3Writer.new.get_author('Hanlon, Abby, author, illustrator.')
       expect(get_author_valid_string).to eq(" by Abby Hanlon")
 
-      get_author_only_surname = S3Writer.new.get_author('Michaelides,')
-      expect(get_author_only_surname).to eq(" by Michaelides")
+      get_author_only_surname = S3Writer.new.get_author('Quindlen,')
+      expect(get_author_only_surname).to eq(" by Quindlen")
+
+      get_author_with_birth_year = S3Writer.new.get_author('Michaelides, Alex, 1977- author.')
+      expect(get_author_with_birth_year).to eq(" by Alex Michaelides")
     end
   end
 end

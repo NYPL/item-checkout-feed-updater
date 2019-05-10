@@ -44,10 +44,12 @@ class ItemStreamHandler
     ItemTypeTally[:tallies][checkout.category] += 1
   end
 
+
   # Handle storage of proxied requests
   def handle (event)
 
     update_tally_if_necessary
+    checkout_count = 0
 
     event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
@@ -61,6 +63,7 @@ class ItemStreamHandler
           checkout = Checkout.from_item_record decoded
           add_checkout checkout
 
+          checkout_count += 1
           update_count checkout
         end
       end

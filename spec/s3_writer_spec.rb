@@ -65,5 +65,19 @@ describe S3Writer do
       end
     end
   end
+
+  describe ' get_author' do
+    it 'returns empty string if no author information' do
+      get_author_empty_string = S3Writer.new.get_author('')
+      expect(get_author_empty_string).to eq("")
+    end
+    it 'returns the string that consistsof author\'s first name and surname' do
+      get_author_valid_string = S3Writer.new.get_author('Hanlon, Abby, author, illustrator.')
+      expect(get_author_valid_string).to eq(" by Abby Hanlon")
+
+      get_author_only_surname = S3Writer.new.get_author('Michaelides,')
+      expect(get_author_only_surname).to eq(" by Michaelides")
+    end
+  end
 end
 

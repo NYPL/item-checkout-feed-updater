@@ -9,16 +9,14 @@ class S3Writer
     @s3_client
   end
 
-  def get_author(checkout)
-    checkout_author_info_array = checkout.has? :author
-      ? checkout.author.to_s.split(",") : [];
+  def get_author(authorString)
+    checkout_author_info_array = authorString.to_s.empty? ? [] : authorString.to_s.split(",")
     surname = checkout_author_info_array[0]
     first_name = checkout_author_info_array[1]
 
-    checkout_author = surname.empty? && first_name.empty?
-      ? "" : " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}"
+    checkout_author = surname || first_name ? " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}" : ""
 
-    checkout_author.rstrip.gsub(/ +/g, " ")
+    checkout_author.rstrip.gsub(/ +/, " ")
   end
 
   def feed_xml(checkouts)
@@ -53,7 +51,7 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             title = "\"#{checkout.title}\""
-            checkout_author = get_author(checkout)
+            checkout_author = checkout.has? :author ? get_author(checkout.author) : ""
             title += checkout_author
 
             xml.title title

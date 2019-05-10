@@ -27,10 +27,6 @@ class S3Writer
     .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
-  def assign_xml_properties(xml)
-
-  end
-
   def assign_checkout_properties(checkout, xml)
     xml.entry {
       xml.id "#{checkout.id}-#{checkout.barcode}"

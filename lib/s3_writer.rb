@@ -55,7 +55,7 @@ class S3Writer
             xml['dc'].contributor checkout.author if checkout.has? :author
             xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
-            xml.circulating checkout.circulating
+            xml.collection checkout.collection
             xml.coarse_item_type checkout.coarse_item_type
           }
         end

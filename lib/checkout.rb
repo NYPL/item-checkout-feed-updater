@@ -70,7 +70,7 @@ class Checkout
   end
 
   def self.assign_link(item, checkout)
-    if item['bibIds'].is_a? Array && !item['bibIds'].empty?
+    if item['bibIds'].is_a?(Array) && !item['bibIds'].empty?
       checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
     end
   end
@@ -102,7 +102,7 @@ class Checkout
     if item['bibIds'].is_a?(Array) && ! item['bibIds'].empty?
       response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"
     end
-    reponse && response['data'] ? response['data'] : nil
+    response && response['data'] ? response['data'] : nil
   end
 
   def self.make_initial_assignments_to_checkout(item, checkout)

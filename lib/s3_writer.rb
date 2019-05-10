@@ -58,9 +58,9 @@ class S3Writer
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
             xml['nypl'].locationType checkout.location_type
             xml['nypl'].coarseItemType checkout.coarse_item_type
-            xml['nypl'].tallies {
+            xml['nypl'].indexes {
               checkout.tallies.keys.each do |category|
-                xml['nypl'].tally(category, checkout.tallies[category])
+                xml['nypl'].index(category, checkout.tallies[category])
               end
             }
           }

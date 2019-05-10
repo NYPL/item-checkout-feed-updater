@@ -17,6 +17,10 @@ class Checkout
     ! val.nil? && ! val.empty?
   end
 
+  def category
+    "#{coarse_item_type};#{circulating}"
+  end
+
   def self.marc_value(record, marc, subfield)
     var_block = record['varFields']
       .select { |field| field['marcTag'] == marc }

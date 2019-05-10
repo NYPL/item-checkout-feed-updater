@@ -37,7 +37,7 @@ class S3Writer
         xml.author {
           xml.name "NYPL Digital"
         }
-    }
+      }
     xml.id "urn:nypl:item-checkout-feed"
     xml.updated Time.now
     xml['nypl'].tallies {

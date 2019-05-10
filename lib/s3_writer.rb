@@ -40,7 +40,6 @@ class S3Writer
         xml['nypl'].tallies {
           ItemTypeTally[:tallies].keys.each do |category|
             xml['nypl'].tally(category, ItemTypeTally[:tallies][category])
-            # xml['nypl'].send(category, ItemTypeTally[:tallies][category])
           end
         }
 
@@ -59,6 +58,11 @@ class S3Writer
             xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
             xml['nypl'].locationType checkout.location_type
             xml['nypl'].coarseItemType checkout.coarse_item_type
+            xml['nypl'].tallies {
+              checkout.tallies.keys.each do |category|
+                xml['nypl'].tally(category, checkout.tallies[category])
+              end
+            }
           }
         end
       }

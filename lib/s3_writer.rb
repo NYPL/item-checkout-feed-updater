@@ -9,6 +9,18 @@ class S3Writer
     @s3_client
   end
 
+  def get_author(checkout)
+    checkout_author_info_array = checkout.has? :author
+      ? checkout.author.to_s.split(",") : [];
+    surname = checkout_author_info_array[0]
+    first_name = checkout_author_info_array[1]
+
+    checkout_author = surname.empty? && first_name.empty?
+      ? "" : " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}"
+
+    checkout_author.rstrip.gsub(/ +/g, " ")
+  end
+
   def feed_xml(checkouts)
     # Determine min and max dates of checkouts
     checkout_dates = checkouts.map { |checkout| checkout.created }.sort
@@ -41,14 +53,9 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             title = "\"#{checkout.title}\""
-
-            checkout_author_info_array = checkout.has? :author
-              ? checkout.author.to_s.split(",") : [];
-
-            checkout_author = checkout_author_info_array[0].empty?
-              ? "" : " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}"
-
+            checkout_author = get_author(checkout)
             title += checkout_author
+
             xml.title title
             xml.link checkout.link if checkout.has? :link
             # Assign somewhat random checkout time:

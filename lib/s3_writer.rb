@@ -27,12 +27,22 @@ class S3Writer
     .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
+  def generate_indexes(checkout, xml)
+    checkout.tallies.keys.each do |category|
+      xml['nypl'].index(category, checkout.tallies[category])
+    end
+  end
+
+  def generate_title(checkout)
+    title = "\"#{checkout.title}\""
+    title += " by #{checkout.author}" if checkout.has? :author
+    title
+  end
+
   def assign_checkout_properties(checkout, xml)
     xml.entry {
       xml.id "#{checkout.id}-#{checkout.barcode}"
-      title = "\"#{checkout.title}\""
-      title += " by #{checkout.author}" if checkout.has? :author
-      xml.title title
+      xml.title generate_title(checkout)
       xml.link checkout.link if checkout.has? :link
       # Assign somewhat random checkout time:
       xml.updated @creation_dates.shift
@@ -42,11 +52,7 @@ class S3Writer
       xml['dc'].identifier "urn:barcode:#{checkout.barcode}" if checkout.has? :barcode
       xml['nypl'].locationType checkout.location_type
       xml['nypl'].coarseItemType checkout.coarse_item_type
-      xml['nypl'].indexes {
-        checkout.tallies.keys.each do |category|
-          xml['nypl'].index(category, checkout.tallies[category])
-        end
-      }
+      xml['nypl'].indexes { generate_indexes(checkout, xml) }
     }
   end
 

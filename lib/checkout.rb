@@ -23,6 +23,10 @@ class Checkout
     subs({ "locationType" => location_type, "coarseItemType" => coarse_item_type })
   end
 
+  def tallies
+    @tallies ||= Hash.new{|h,k| h[k] = 0}
+  end
+
   def self.marc_value(record, marc, subfield)
     var_block = record['varFields']
       .select { |field| field['marcTag'] == marc }

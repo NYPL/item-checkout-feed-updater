@@ -45,31 +45,85 @@ class Checkout
     item_type.to_i >= 100 ? 'circulating' : 'non-circulating'
   end
 
-  def self.from_item_record(item)
-    checkout = Checkout.new
+  def self.assign_item_type(item, checkout)
     checkout.item_type = item['fixedFields']['61']['value']
-    checkout.coarse_item_type = self.map_item_types_to_coarse_item_types checkout.item_type
-    checkout.collection = self.circulating? checkout.item_type
-    checkout.id = item['id']
-    checkout.barcode = item['barcode']
-    checkout.created = item['updatedDate']
+  end
 
+  def self.assign_coarse_item_type(item, checkout)
+    checkout.coarse_item_type = self.map_item_types_to_coarse_item_types checkout.item_type
+  end
+
+  def self.assign_collection(item, checkout)
+    checkout.collection = self.circulating? checkout.item_type
+  end
+
+  def self.assign_id(item, checkout)
+    checkout.id = item['id']
+  end
+
+  def self.assign_barcode(item, checkout)
+    checkout.barcode = item['barcode']
+  end
+
+  def self.assign_created(item, checkout)
+    checkout.created = item['updatedDate']
+  end
+
+  def self.assign_link(item, checkout)
+    if item['bibIds'].is_a? Array && !item['bibIds'].empty?
+      checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
+    end
+  end
+
+  def self.assigners
+    self.methods.select { |method| method.match? /assign_/ }
+  end
+
+  def self.add_bib_title(bib, checkout)
+    checkout.title = bib['title']
+  end
+
+  def self.add_bib_author(bib, checkout)
+    checkout.author = bib['author']
+  end
+
+  def self.add_bib_isbn(bib, checkout)
+    # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
+    checkout.isbn = self.marc_value bib, '020', 'a'
+    checkout.isbn.gsub! /\s\(.*/, '' if !checkout.isbn.nil?
+  end
+
+  def self.bib_adders
+    self.methods.select { |method| method.match? /add_bib_/}
+  end
+
+  def self.get_bibs(item)
+    response = nil
     if item['bibIds'].is_a?(Array) && ! item['bibIds'].empty?
       response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"
-      if response && response['data']
-        bib = response['data']
-        Application.logger.debug "Got bib for item #{item['id']}: #{bib.to_json}"
-
-        checkout.title = bib['title']
-        checkout.author = bib['author']
-        checkout.link = "https://browse.nypl.org/iii/encore/record/C__Rb#{item['bibIds'].first}"
-
-        # Get ISBN out of 020 $a (per https://docs.google.com/spreadsheets/d/1RtDxIpzcCrVqJqUjmMGkn8n2hX3BZVN9QvbB1HRgx1c/edit#gid=0&range=35:35 ):
-        checkout.isbn = self.marc_value bib, '020', 'a'
-        checkout.isbn.gsub! /\s\(.*/, '' if !checkout.isbn.nil?
-      end
     end
+    reponse && response['data'] ? response['data'] : nil
+  end
 
+  def self.make_initial_assignments_to_checkout(item, checkout)
+    self.assigners.each do |assigner|
+      self.send(assigner, item, checkout)
+    end
+  end
+
+  def self.make_bib_based_assignments_to_checkout(item, checkout)
+    bib = self.get_bibs(item)
+    return unless bib
+    Application.logger.debug "Got bib for item #{item['id']}: #{bib.to_json}"
+    self.bib_adders.each do |bib_adder|
+      self.send(bib_adder, bib, checkout)
+    end
+  end
+
+  def self.from_item_record(item)
+    checkout = Checkout.new
+    self.make_initial_assignments_to_checkout(item, checkout)
+    self.make_bib_based_assignments_to_checkout(item, checkout)
     checkout
   end
 end

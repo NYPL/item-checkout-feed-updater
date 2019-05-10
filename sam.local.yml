@@ -19,3 +19,4 @@ Resources:
           S3_BUCKET_NAME: 'checkout-feed-test'
           S3_FEED_KEY: 'feed.xml'
           LOG_LEVEL: debug
+          TZ: 'America/New_York'

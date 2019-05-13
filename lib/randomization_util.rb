@@ -7,13 +7,15 @@ def delta_seconds(checkouts)
   max_date - min_date
 end
 
-def none(checkouts)
+def none(checkouts_requiring_randomized_date, all_checkouts)
+  checkouts_requiring_randomized_date
+    .map { |checkout| Time.parse(checkout.created).iso8601 }
 end
 
-def random_shuffle(checkouts)
+def random_shuffle(checkouts_requiring_randomized_date, all_checkouts)
 end
 
-def uniform(checkouts, all_checkouts)
+def uniform(checkouts_requiring_randomized_date, all_checkouts)
   Array.new(checkouts.size)
     .map { |ind| rand delta_seconds(all_checkouts) }
     .sort

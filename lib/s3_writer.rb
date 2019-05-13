@@ -9,9 +9,13 @@ class S3Writer
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
-  def creation_dates(checkouts)
+  def add_creation_dates!(checkouts)
     # Generate random creation times over covered timespan:
-    @creation_dates ||= send(ENV['RANDOMIZATION_METHOD'], checkouts)
+    checkouts_requiring_creation_date = checkouts_requiring_creation_date(checkouts)
+    creation_dates = end(ENV['RANDOMIZATION_METHOD'], checkouts)
+    checkouts_requiring_creation_date.each do |checkout, idx|
+      checkout.creation_date = checkout_dates[idx]
+    end
   end
 
   def generate_indexes(checkout, xml)
@@ -31,13 +35,13 @@ class S3Writer
     end
   end
 
-  def assign_checkout_properties(checkout, xml)
+  def assign_checkout_properties!(checkout, xml)
     xml.entry {
       xml.id "#{checkout.id}-#{checkout.barcode}"
       xml.title generate_title(checkout)
       xml.link checkout.link if checkout.has? :link
       # Assign somewhat random checkout time:
-      xml.updated @creation_dates.shift
+      xml.updated checkout.creation_date
       xml['dcterms'].title checkout.title if checkout.has? :title
       xml['dc'].contributor checkout.author if checkout.has? :author
       xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
@@ -49,7 +53,7 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-    creation_dates(checkouts)
+    add_creation_dates!(checkouts)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",
@@ -64,7 +68,7 @@ class S3Writer
           xml.updated Time.now
           xml['nypl'].tallies { generate_tallies(xml) }
           checkouts.each do |checkout|
-            assign_checkout_properties(checkout, xml)
+            assign_checkout_properties!(checkout, xml)
           end
         }
     end

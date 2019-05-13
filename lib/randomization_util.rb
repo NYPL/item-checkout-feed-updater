@@ -17,7 +17,7 @@ def random_shuffle(checkouts_requiring_randomized_date, all_checkouts)
     .map { |checkout| [rand, checkout] }
     .sort
     .map { |(float, checkout)| checkout }
-  none(shuffled, all_checkouts)
+  none(shuffled)
 end
 
 def uniform(checkouts_requiring_randomized_date, all_checkouts)

@@ -4,6 +4,7 @@ require_relative 'checkout'
 
 class ItemStreamHandler
   MAX_CHECKOUTS_IN_MEMORY = ENV['MAX_CHECKOUTS_IN_MEMORY'].to_i
+  RECENT_IDS = {}
 
   def avro_decoder(name)
     @avro_decoders = {} if @avro_decoders.nil?
@@ -64,10 +65,12 @@ class ItemStreamHandler
         # Presence of 'duedate' indicates it's checked-out
         if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
-          add_checkout checkout
-
-          checkout_count += 1
-          update_count checkout
+          unless RECENT_IDS[checkout.id] - Time.now > ENV[CHECKOUT_ID_EXPIRE_TIME].to_i
+            add_checkout checkout
+            checkout_count += 1
+            update_count checkout
+            RECENT_IDS[checkout.id] = Time.now
+          end
         end
       end
 

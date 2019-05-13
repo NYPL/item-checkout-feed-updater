@@ -37,6 +37,10 @@ class PreProcessingRandomizationUtil
     args[0]
   end
 
-  def random_shuffle
+  def random_shuffle(array)
+    array
+      .map { |record| [rand, record] }
+      .sort { |(float, record)| float}
+      .map { |(float, record)| record }
   end
 end

@@ -51,7 +51,7 @@ class S3Writer
           xml.entry {
             xml.id "#{checkout.id}-#{checkout.barcode}"
             title = "\"#{checkout.title}\""
-            checkout_author = checkout.has? :author ? get_author(checkout.author) : ""
+            checkout_author = checkout.has?(:author) ? get_author(checkout.author) : ""
             title += checkout_author
 
             xml.title title

@@ -48,6 +48,12 @@ class ItemStreamHandler
     end
   end
 
+  def remove_old_ids(id_hash)
+    id_hash.each do |(id, time)|
+      id_hash.delete(id) if Time.now - time > ENV[CHECKOUT_ID_EXPIRE_TIME]
+    end
+  end
+
 
   # Handle storage of proxied requests
   def handle (event)
@@ -70,6 +76,7 @@ class ItemStreamHandler
             checkout_count += 1
             update_count checkout
             RECENT_IDS[checkout.id] = Time.now
+            remove_old_ids RECENT_IDS
           end
         end
       end

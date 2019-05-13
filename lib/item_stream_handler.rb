@@ -33,9 +33,25 @@ class ItemStreamHandler
     arr
   end
 
+  def update_tally_if_necessary
+    if Time.now.day != ItemTypeTally[:time].day
+      ItemTypeTally[:time] = Time.now
+      ItemTypeTally[:tallies] = Hash.new {|h,k| h[k] = 0}
+    end
+  end
+
+  def update_count(checkout)
+    checkout.categories.each do |category|
+      ItemTypeTally[:tallies][category] += 1
+      checkout.tallies[category] = ItemTypeTally[:tallies][category]
+    end
+  end
+
+
   # Handle storage of proxied requests
   def handle (event)
 
+    update_tally_if_necessary
     checkout_count = 0
 
     event["Records"]
@@ -44,13 +60,14 @@ class ItemStreamHandler
         avro_data = record["kinesis"]["data"]
 
         decoded = avro_decoder('Item').decode avro_data
-        
+
         # Presence of 'duedate' indicates it's checked-out
         if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
           add_checkout checkout
-          
+
           checkout_count += 1
+          update_count checkout
         end
       end
 
@@ -58,7 +75,7 @@ class ItemStreamHandler
 
     # If any changes occurred, push latest to S3 via S3Writer
     Application.s3_writer.write @checkouts if checkout_count > 0
- 
+
     { success: true }
   end
 end

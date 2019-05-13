@@ -9,6 +9,10 @@ class S3Writer
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
+  def checkouts_requiring_creation_date(checkouts)
+    checkouts.select { |checkout| !checkout.creation_date }
+  end
+
   def add_creation_dates!(checkouts)
     # Generate random creation times over covered timespan:
     checkouts_requiring_creation_date = checkouts_requiring_creation_date(checkouts)

@@ -10,7 +10,7 @@ class S3Writer
   end
 
   def get_author(authorString)
-    checkout_author_info_array = authorString.to_s.empty? ? [] : authorString.to_s.split(",")
+    checkout_author_info_array = authorString.to_s.split(",")
     surname = checkout_author_info_array[0]
     first_name = checkout_author_info_array[1]
 

@@ -13,9 +13,9 @@ end
 def random_shuffle(checkouts)
 end
 
-def uniform(checkouts)
+def uniform(checkouts, all_checkout)
   Array.new(checkouts.size)
-    .map { |ind| rand delta_seconds(checkouts) }
+    .map { |ind| rand delta_seconds(all_checkouts) }
     .sort
     .reverse
     .map { |s| Time.at(Time.now - s).iso8601 }

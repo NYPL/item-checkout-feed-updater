@@ -5,8 +5,7 @@ require_relative 's3_client'
 
 class S3Writer
   def s3_client
-    @s3_client = S3Client.new if @s3_client.nil?
-    @s3_client
+    @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
   def delta_seconds(checkouts)

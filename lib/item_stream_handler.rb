@@ -50,7 +50,7 @@ class ItemStreamHandler
 
   def remove_old_ids(id_hash)
     id_hash.each do |(id, time)|
-      id_hash.delete(id) if Time.now - time > ENV[CHECKOUT_ID_EXPIRE_TIME]
+      id_hash.delete(id) if Time.now - time > ENV[CHECKOUT_ID_EXPIRE_TIME].to_i
     end
   end
 

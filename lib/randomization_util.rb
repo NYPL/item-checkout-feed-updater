@@ -7,6 +7,12 @@ def delta_seconds(checkouts)
   max_date - min_date
 end
 
+def none(checkouts)
+end
+
+def random_shuffle(checkouts)
+end
+
 def uniform(checkouts)
   Array.new(checkouts.size)
     .map { |ind| rand delta_seconds(checkouts) }

@@ -21,7 +21,7 @@ class S3Writer
     }
     randomized_dates = PostProcessingRandomizationUtil.send(
       ENV['RANDOMIZATION_METHOD'], randomization_args)
-    checkouts_requiring_randomized_date.each do |checkout, idx|
+    randomization_args[:checkouts_requiring_randomized_date].each_with_index do |checkout, idx|
       checkout.randomized_date = randomized_dates[idx]
     end
   end

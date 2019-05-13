@@ -9,21 +9,21 @@ class PostProcessingRandomizationUtil
     max_date - min_date
   end
 
-  def self.none(checkouts_requiring_randomized_date:)
-    checkouts_requiring_randomized_date
+  def self.none(opts)
+    opts[:checkouts_requiring_randomized_date]
       .map { |checkout| Time.parse(checkout.created).iso8601 }
   end
 
-  def self.uniform(checkouts_requiring_randomized_date:, all_checkouts:)
-    Array.new(checkouts_requiring_randomized_date.size)
-      .map { |ind| rand self.delta_seconds(all_checkouts) }
+  def self.uniform(opts)
+    Array.new(opts[:checkouts_requiring_randomized_date].size)
+      .map { |ind| rand self.delta_seconds(opts[:all_checkouts]) }
       .sort
       .reverse
       .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
   def self.method_missing(method, *args, &block)
-    if (args[0].is_a? Hash) && args.length == 1 && args.keys[:checkouts_requiring_randomized_date]
+    if (args[0].is_a? Hash) && args.length == 1 && args[0][:checkouts_requiring_randomized_date]
       self.none(args[0])
     else
       super

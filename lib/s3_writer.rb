@@ -2,28 +2,16 @@ require 'rubygems'
 require 'nokogiri'
 
 require_relative 's3_client'
+require_relative 'randomization_util'
 
 class S3Writer
   def s3_client
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
-  def delta_seconds(checkouts)
-    # Determine min and max dates of checkouts
-    checkout_dates = checkouts.map { |checkout| checkout.created }.sort
-    min_date = Time.parse checkout_dates.first
-    max_date = Time.parse checkout_dates.last
-    # Determine seconds elapsed between first and last checkout
-    max_date - min_date
-  end
-
   def creation_dates(checkouts)
     # Generate random creation times over covered timespan:
-    @creation_dates ||= Array.new(checkouts.size)
-      .map { |ind| rand delta_seconds(checkouts) }
-      .sort
-      .reverse
-      .map { |s| Time.at(Time.now - s).iso8601 }
+    @creation_dates ||= send(ENV['RANDOMIZATION_METHOD'], checkouts)
   end
 
   def generate_indexes(checkout, xml)
@@ -34,7 +22,7 @@ class S3Writer
 
   def generate_title(checkout)
     title = "\"#{checkout.title}\""
-    title += checkout.has?(:author) ? " by #{checkout.author}" : "" 
+    title += checkout.has?(:author) ? " by #{checkout.author}" : ""
   end
 
   def generate_tallies(xml)

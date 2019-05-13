@@ -34,8 +34,7 @@ class S3Writer
 
   def generate_title(checkout)
     title = "\"#{checkout.title}\""
-    title += " by #{checkout.author}" if checkout.has? :author
-    title
+    title += checkout.has?(:author) ? " by #{checkout.author}" : "" 
   end
 
   def generate_tallies(xml)

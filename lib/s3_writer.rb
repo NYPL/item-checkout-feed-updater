@@ -9,16 +9,16 @@ class S3Writer
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
-  def checkouts_requiring_creation_date(checkouts)
-    checkouts.select { |checkout| !checkout.creation_date }
+  def checkouts_requiring_randomized_date(checkouts)
+    checkouts.select { |checkout| !checkout.randomized_date }
   end
 
-  def add_creation_dates!(checkouts)
+  def add_randomized_dates!(checkouts)
     # Generate random creation times over covered timespan:
-    checkouts_requiring_creation_date = checkouts_requiring_creation_date(checkouts)
-    creation_dates = end(ENV['RANDOMIZATION_METHOD'], checkouts)
-    checkouts_requiring_creation_date.each do |checkout, idx|
-      checkout.creation_date = checkout_dates[idx]
+    checkouts_requiring_randomized_date = checkouts_requiring_randomized_date(checkouts)
+    randomized_dates = end(ENV['RANDOMIZATION_METHOD'], checkouts)
+    checkouts_requiring_randomized_date.each do |checkout, idx|
+      checkout.randomized_date = checkout_dates[idx]
     end
   end
 
@@ -45,7 +45,7 @@ class S3Writer
       xml.title generate_title(checkout)
       xml.link checkout.link if checkout.has? :link
       # Assign somewhat random checkout time:
-      xml.updated checkout.creation_date
+      xml.updated checkout.randomized_date
       xml['dcterms'].title checkout.title if checkout.has? :title
       xml['dc'].contributor checkout.author if checkout.has? :author
       xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
@@ -57,7 +57,7 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-    add_creation_dates!(checkouts)
+    add_randomized_dates!(checkouts)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",

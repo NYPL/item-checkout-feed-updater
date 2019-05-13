@@ -4,7 +4,7 @@ require_relative './checkout_builder_util.rb'
 
 class Checkout
   attr_accessor :id, :created, :isbn, :barcode, :title, :author, :link,
-    :item_type, :coarse_item_type, :location_type, :creation_date
+    :item_type, :coarse_item_type, :location_type, :randomized_date
 
   def to_s
     "Checkout #{id}: #{title} by #{author} (isbn #{isbn})"

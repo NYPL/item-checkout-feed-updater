@@ -14,13 +14,13 @@ def random_shuffle(checkouts)
 end
 
 def uniform(checkouts)
-  checkouts_requiring_creation_date = checkouts_requiring_creation_date(checkout)
-  creation_dates = Array.new(checkouts_requiring_creation_date.size)
+  checkouts_requiring_randomized_date = checkouts_requiring_randomized_date(checkout)
+  randomized_dates = Array.new(checkouts_requiring_randomized_date.size)
     .map { |ind| rand delta_seconds(checkouts) }
     .sort
     .reverse
     .map { |s| Time.at(Time.now - s).iso8601 }
-  checkouts_requiring_creation_date.each_with_index do |checkout, idx|
-    checkout.creation_date = creation_dates[idx]
+  checkouts_requiring_randomized_date.each_with_index do |checkout, idx|
+    checkout.randomized_date = randomized_dates[idx]
   end
 end

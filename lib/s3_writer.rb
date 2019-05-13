@@ -8,6 +8,16 @@ class S3Writer
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
+  def get_author(authorString)
+    checkout_author_info_array = authorString.to_s.split(",")
+    surname = checkout_author_info_array[0]
+    first_name = checkout_author_info_array[1]
+
+    checkout_author = surname || first_name ? " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}" : ""
+
+    checkout_author.rstrip.gsub(/ +/, " ")
+  end
+
   def delta_seconds(checkouts)
     # Determine min and max dates of checkouts
     checkout_dates = checkouts.map { |checkout| checkout.created }.sort
@@ -34,7 +44,7 @@ class S3Writer
 
   def generate_title(checkout)
     title = "\"#{checkout.title}\""
-    title += checkout.has?(:author) ? " by #{checkout.author}" : "" 
+    title += checkout.has?(:author) ? get_author(checkout.author) : ""
   end
 
   def generate_tallies(xml)

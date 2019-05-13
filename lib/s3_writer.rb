@@ -20,10 +20,10 @@ class S3Writer
   def creation_dates(checkouts)
     # Generate random creation times over covered timespan:
     @creation_dates ||= Array.new(checkouts.size)
-    .map { |ind| rand delta_seconds(checkouts) }
-    .sort
-    .reverse
-    .map { |s| Time.at(Time.now - s).iso8601 }
+      .map { |ind| rand delta_seconds(checkouts) }
+      .sort
+      .reverse
+      .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
   def generate_indexes(checkout, xml)

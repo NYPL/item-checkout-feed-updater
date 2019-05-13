@@ -21,7 +21,7 @@ def random_shuffle(checkouts_requiring_randomized_date, all_checkouts)
 end
 
 def uniform(checkouts_requiring_randomized_date, all_checkouts)
-  Array.new(all_checkouts.size)
+  Array.new(checkouts.size)
     .map { |ind| rand delta_seconds(all_checkouts) }
     .sort
     .reverse

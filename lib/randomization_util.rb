@@ -13,6 +13,11 @@ def none(checkouts_requiring_randomized_date, all_checkouts)
 end
 
 def random_shuffle(checkouts_requiring_randomized_date, all_checkouts)
+  shuffled = checkouts_requiring_randomized_date
+    .map { |checkout| [rand, checkout] }
+    .sort
+    .map { |(float, checkout)| checkout }
+  none(shuffled)
 end
 
 def uniform(checkouts_requiring_randomized_date, all_checkouts)

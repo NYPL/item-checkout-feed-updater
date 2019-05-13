@@ -71,7 +71,7 @@ class ItemStreamHandler
         # Presence of 'duedate' indicates it's checked-out
         if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
-          unless RECENT_IDS[checkout.id] && RECENT_IDS[checkout.id] - Time.now < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+          unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
             add_checkout checkout
             checkout_count += 1
             update_count checkout

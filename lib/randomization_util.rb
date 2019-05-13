@@ -13,7 +13,7 @@ end
 def random_shuffle(checkouts)
 end
 
-def uniform(checkouts, all_checkout)
+def uniform(checkouts, all_checkouts)
   Array.new(checkouts.size)
     .map { |ind| rand delta_seconds(all_checkouts) }
     .sort

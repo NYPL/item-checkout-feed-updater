@@ -27,8 +27,8 @@ class S3Writer
   end
 
   def generate_indexes(checkout, xml)
-    checkout.tallies.keys.each do |category|
-      xml['nypl'].index(category, checkout.tallies[category])
+    checkout.tallies.each do |(category, tally)|
+      xml['nypl'].index(category, tally)
     end
   end
 

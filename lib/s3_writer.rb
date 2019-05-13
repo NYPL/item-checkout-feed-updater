@@ -15,8 +15,12 @@ class S3Writer
 
   def add_randomized_dates!(checkouts)
     # Generate random creation times over covered timespan:
-    checkouts_requiring_randomized_date = checkouts_requiring_randomized_date(checkouts)
-    randomized_dates = send(ENV['RANDOMIZATION_METHOD'], checkouts_requiring_randomized_date, checkouts)
+    randomization_args = {
+      checkouts_requiring_randomized_date: checkouts_requiring_randomized_date(checkouts),
+      all_checkouts: checkouts
+    }
+    randomized_dates = PostProcessingRandomizationUtil.send(
+      ENV['RANDOMIZATION_METHOD'], randomization_args)
     checkouts_requiring_randomized_date.each do |checkout, idx|
       checkout.randomized_date = randomized_dates[idx]
     end

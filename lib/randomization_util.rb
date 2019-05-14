@@ -30,6 +30,23 @@ class PostProcessingRandomizationUtil
     end
   end
 
+  def self.checkouts_requiring_randomized_date(checkouts)
+    checkouts.select { |checkout| !checkout.randomized_date }
+  end
+
+
+  def self.add_randomized_dates!(checkouts)
+    # Generate random creation times over covered timespan:
+    randomization_args = {
+      checkouts_requiring_randomized_date: self.checkouts_requiring_randomized_date(checkouts),
+      all_checkouts: checkouts
+    }
+    randomized_dates = self.send(ENV['RANDOMIZATION_METHOD'], randomization_args)
+    randomization_args[:checkouts_requiring_randomized_date].each_with_index do |checkout, idx|
+      checkout.randomized_date = randomized_dates[idx]
+    end
+  end
+
 end
 
 class PreProcessingRandomizationUtil

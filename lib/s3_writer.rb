@@ -2,17 +2,12 @@ require 'rubygems'
 require 'nokogiri'
 
 require_relative 's3_client'
-require_relative 'randomization_util'
 
 class S3Writer
   def s3_client
     @s3_client ||= S3Client.new if @s3_client.nil?
   end
 
-  def checkouts_requiring_randomized_date(checkouts)
-    checkouts.select { |checkout| !checkout.randomized_date }
-  end
-  
   def get_author(authorString)
     checkout_author_info_array = authorString.to_s.split(",")
     surname = checkout_author_info_array[0]
@@ -21,19 +16,6 @@ class S3Writer
     checkout_author = surname || first_name ? " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}" : ""
 
     checkout_author.rstrip.gsub(/ +/, " ")
-  end
-
-  def add_randomized_dates!(checkouts)
-    # Generate random creation times over covered timespan:
-    randomization_args = {
-      checkouts_requiring_randomized_date: checkouts_requiring_randomized_date(checkouts),
-      all_checkouts: checkouts
-    }
-    randomized_dates = PostProcessingRandomizationUtil.send(
-      ENV['RANDOMIZATION_METHOD'], randomization_args)
-    randomization_args[:checkouts_requiring_randomized_date].each_with_index do |checkout, idx|
-      checkout.randomized_date = randomized_dates[idx]
-    end
   end
 
   def generate_indexes(checkout, xml)
@@ -71,7 +53,6 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-    add_randomized_dates!(checkouts)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",

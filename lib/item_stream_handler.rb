@@ -72,6 +72,7 @@ class ItemStreamHandler
           update_count checkout
         end
       end
+    PostProcessingRandomizationUtil.add_randomized_dates! @checkouts
 
     Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 

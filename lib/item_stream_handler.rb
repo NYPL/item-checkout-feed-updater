@@ -57,7 +57,7 @@ class ItemStreamHandler
 
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
-    PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
+    records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
     records.each do |record|
         avro_data = record["kinesis"]["data"]
 

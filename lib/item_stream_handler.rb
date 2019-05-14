@@ -35,7 +35,7 @@ class ItemStreamHandler
     arr
   end
 
-  def update_tally_if_necessary
+  def clear_tally_if_necessary
     if Time.now.day != ItemTypeTally[:time].day
       ItemTypeTally[:time] = Time.now
       ItemTypeTally[:tallies] = Hash.new {|h,k| h[k] = 0}
@@ -59,7 +59,7 @@ class ItemStreamHandler
   # Handle storage of proxied requests
   def handle (event)
 
-    update_tally_if_necessary
+    clear_tally_if_necessary
     checkout_count = 0
 
     records = event["Records"]

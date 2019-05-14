@@ -7,9 +7,7 @@ describe ItemStreamHandler do
         time: Time.now,
         tallies: Hash.new {|h,k| h[k] = 0 }
       }
-      irrelevant = []
-      Application = irrelevant
-      item_stream_handler = ItemStreamHandler.new
+      item_stream_handler = nil
       mock_event = {
         "Records" => [
           {
@@ -29,6 +27,8 @@ describe ItemStreamHandler do
       mock_checkout = {}
 
       before(:each) do
+        item_stream_handler = ItemStreamHandler.new
+        ItemStreamHandler::RECENT_IDS.clear
         ENV['CHECKOUT_ID_EXPIRE_TIME'] = '1000000'
         allow(mock_decoder).to receive(:decode).and_return(decoded_data)
         allow(AvroDecoder).to receive(:by_name).and_return(mock_decoder)
@@ -36,7 +36,7 @@ describe ItemStreamHandler do
         allow(Checkout).to receive(:from_item_record).and_return(mock_checkout)
         allow(item_stream_handler).to receive(:add_checkout).and_return(nil)
         allow(item_stream_handler).to receive(:update_count).and_return(nil)
-        allow(irrelevant).to receive_messages(logger: irrelevant, info: irrelevant, s3_writer: irrelevant, write: irrelevant)
+        allow(Application).to receive_messages(logger: Application, info: Application, s3_writer: Application, write: Application)
       end
 
       it 'should process a checkout with a new id' do
@@ -46,7 +46,8 @@ describe ItemStreamHandler do
 
       it 'should not process a checkout with a recent id' do
         item_stream_handler.handle(mock_event)
-        expect(item_stream_handler).not_to have_received(:add_checkout)
+        item_stream_handler.handle(mock_event)
+        expect(item_stream_handler).to have_received(:add_checkout).once
       end
 
       it 'should process a checkout with an old id' do

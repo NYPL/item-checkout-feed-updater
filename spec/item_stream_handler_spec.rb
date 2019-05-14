@@ -3,6 +3,7 @@ require 'spec_helper'
 describe ItemStreamHandler do
   describe '#handle' do
     describe 'deduping based on ids' do
+      Application ||= []
       ItemTypeTally = {
         time: Time.now,
         tallies: Hash.new {|h,k| h[k] = 0 }

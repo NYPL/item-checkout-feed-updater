@@ -12,6 +12,16 @@ class S3Writer
   def checkouts_requiring_randomized_date(checkouts)
     checkouts.select { |checkout| !checkout.randomized_date }
   end
+  
+  def get_author(authorString)
+    checkout_author_info_array = authorString.to_s.split(",")
+    surname = checkout_author_info_array[0]
+    first_name = checkout_author_info_array[1]
+
+    checkout_author = surname || first_name ? " by #{checkout_author_info_array[1]} #{checkout_author_info_array[0]}" : ""
+
+    checkout_author.rstrip.gsub(/ +/, " ")
+  end
 
   def add_randomized_dates!(checkouts)
     # Generate random creation times over covered timespan:
@@ -34,7 +44,7 @@ class S3Writer
 
   def generate_title(checkout)
     title = "\"#{checkout.title}\""
-    title += checkout.has?(:author) ? " by #{checkout.author}" : ""
+    title += checkout.has?(:author) ? get_author(checkout.author) : ""
   end
 
   def generate_tallies(xml)

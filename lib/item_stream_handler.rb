@@ -2,6 +2,7 @@
 require_relative 'avro_decoder'
 require_relative 'checkout'
 require_relative 'randomization_util'
+require_relative 'item_handler_records'
 
 class ItemStreamHandler
   MAX_CHECKOUTS_IN_MEMORY = ENV['MAX_CHECKOUTS_IN_MEMORY'].to_i
@@ -11,20 +12,6 @@ class ItemStreamHandler
     @avro_decoders = {} if @avro_decoders.nil?
     @avro_decoders[name] = AvroDecoder.by_name(name) if @avro_decoders[name].nil?
     @avro_decoders[name]
-  end
-
-  def add_checkout(checkout)
-    @checkouts = [] if @checkouts.nil?
-
-    # Application.logger.debug "Adding checkout #{checkout}"
-
-    # Add checkout to end:
-    @checkouts << checkout
-
-    Application.logger.debug "Collected checkouts size is now #{@checkouts.size}"
-
-    # Make sure @checkouts doesn't grow behond max:
-    @checkouts = constrain_size @checkouts, MAX_CHECKOUTS_IN_MEMORY
   end
 
   # Reduce array to the given size
@@ -42,12 +29,6 @@ class ItemStreamHandler
     end
   end
 
-  def update_count(checkout)
-    checkout.categories.each do |category|
-      ItemTypeTally[:tallies][category] += 1
-      checkout.tallies[category] = ItemTypeTally[:tallies][category]
-    end
-  end
 
   def remove_old_ids(id_hash)
     id_hash.each do |(id, time)|
@@ -55,39 +36,65 @@ class ItemStreamHandler
     end
   end
 
-
-  # Handle storage of proxied requests
-  def handle (event)
-
+  def cleanup
     clear_tally_if_necessary
-    checkout_count = 0
+    remove_old_ids RECENT_IDS
+    # Make sure @checkouts doesn't grow behond max:
+    @checkouts = constrain_size @checkouts, MAX_CHECKOUTS_IN_MEMORY
+  end
 
-    records = event["Records"]
+  def add_checkout(checkout)
+    @checkouts = [] if @checkouts.nil?
+
+    # Application.logger.debug "Adding checkout #{checkout}"
+
+    # Add checkout to end:
+    @checkouts << checkout
+
+    Application.logger.debug "Collected checkouts size is now #{@checkouts.size}"
+  end
+
+  def update_count(checkout)
+    checkout.categories.each do |category|
+      ItemTypeTally[:tallies][category] += 1
+      checkout.tallies[category] = ItemTypeTally[:tallies][category]
+    end
+  end
+
+  def raw_records(event)
+    event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
-    records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
-    records.each do |record|
-        avro_data = record["kinesis"]["data"]
+  end
 
-        decoded = avro_decoder('Item').decode avro_data
+  def get_checkouts_from_event(event)
+    ItemHandlerRecords.new(raw_records(event))
+      .randomize_records!
+      .decode_records!
+      .select_checkouts!
+      .build_checkouts!
+      .reject_duplicates!
+      .records
+  end
 
-        # Presence of 'duedate' indicates it's checked-out
-        if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
-          checkout = Checkout.from_item_record decoded
-          unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
-            add_checkout checkout
-            checkout_count += 1
-            update_count checkout
-            RECENT_IDS[checkout.id] = Time.now
-            remove_old_ids RECENT_IDS
-          end
-        end
-      end
+  def process_checkout(checkout)
+    add_checkout checkout
+    update_count checkout
+    RECENT_IDS[checkout.id] = Time.now
+  end
+
+
+  def handle(event)
+    cleanup
+    checkouts = get_checkouts_from_event(event)
+    checkouts.each do |checkout|
+      process_checkout(checkout)
+    end
     PostProcessingRandomizationUtil.add_randomized_dates! @checkouts
 
-    Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
+    Application.logger.info "Processed #{event['Records'].size} records (#{checkouts.count} checkouts)"
 
     # If any changes occurred, push latest to S3 via S3Writer
-    Application.s3_writer.write @checkouts if checkout_count > 0
+    Application.s3_writer.write @checkouts if checkouts.count > 0
 
     { success: true }
   end

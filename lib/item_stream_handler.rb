@@ -5,6 +5,7 @@ require_relative 'randomization_util'
 
 class ItemStreamHandler
   MAX_CHECKOUTS_IN_MEMORY = ENV['MAX_CHECKOUTS_IN_MEMORY'].to_i
+  RECENT_IDS = {}
 
   def avro_decoder(name)
     @avro_decoders = {} if @avro_decoders.nil?
@@ -48,6 +49,12 @@ class ItemStreamHandler
     end
   end
 
+  def remove_old_ids(id_hash)
+    id_hash.each do |(id, time)|
+      id_hash.delete(id) if Time.now - time > ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+    end
+  end
+
 
   # Handle storage of proxied requests
   def handle (event)
@@ -66,10 +73,13 @@ class ItemStreamHandler
         # Presence of 'duedate' indicates it's checked-out
         if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
-          add_checkout checkout
-
-          checkout_count += 1
-          update_count checkout
+          unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+            add_checkout checkout
+            checkout_count += 1
+            update_count checkout
+            RECENT_IDS[checkout.id] = Time.now
+            remove_old_ids RECENT_IDS
+          end
         end
       end
     PostProcessingRandomizationUtil.add_randomized_dates! @checkouts

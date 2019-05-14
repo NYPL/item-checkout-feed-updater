@@ -20,3 +20,4 @@ Resources:
           S3_FEED_KEY: 'feed.xml'
           LOG_LEVEL: debug
           TZ: 'America/New_York'
+          CHECKOUT_ID_EXPIRE_TIME: 60*60

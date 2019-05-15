@@ -37,6 +37,10 @@ class PostProcessingRandomizationUtil
   end
 
   def self.add_randomized_dates!(checkouts)
+    # If a checkout is new, it will not have a randomized date assigned to it yet
+    # We pass the new checkouts and the list of all checkouts to the randomization
+    # method named in ENV. Right now none of the randomization methods actually care about
+    # the all_checkouts variable, but it might be a useful context variable in the future
     randomization_args = {
       new_checkout: RandomizationHelperUtil.checkouts_requiring_randomized_date(checkouts),
       all_checkouts: checkouts

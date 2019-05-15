@@ -16,6 +16,11 @@ end
 
 class PostProcessingRandomizationUtil
 
+  # THE CLASS METHODS OF THIS CLASS SHOULD BE EXACTLY THE POSSIBLE RANDOMIZATION_METHODs
+  # that require post-processing. Any of these methods should be possible values for
+  # ENV[RANDOMIZATION_METHOD]
+
+  # This is basically a no-op method, to be used if we aren't randomizing
   def self.none(opts)
     opts[:new_checkouts]
       .map { |checkout| Time.parse(checkout.created).iso8601 }
@@ -29,6 +34,10 @@ class PostProcessingRandomizationUtil
       .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
+  # If a randomization method doesn't require any pre-processing, it won't be listed
+  # as a method of this class. method_missing will catch it and execute a no-op (in this case,
+  # the 'none' method, corresponding to no randomization). We check that the arguments make sense
+  # in order to avoid having this called totally accidentally.
   def self.method_missing(method, *args, &block)
     if (args[0].is_a? Hash) && args.length == 1 && args[0][:new_checkouts]
       self.none(args[0])
@@ -55,6 +64,12 @@ class PostProcessingRandomizationUtil
 end
 
 class PreProcessingRandomizationUtil
+  # THE CLASS METHODS OF THIS CLASS SHOULD BE EXACTLY THE POSSIBLE RANDOMIZATION_METHODs
+  # that require pre-processing. Any of these methods should be possible values for
+  # ENV[RANDOMIZATION_METHOD]
+
+  # If a randomization method doesn't require any pre-processing, it won't be listed
+  # as a method of this class. method_missing will catch it and execute a no-op
   def self.method_missing(method, *args, &block)
     args[0]
   end

@@ -17,7 +17,8 @@ end
 class PostProcessingRandomizationUtil
 
   # THE CLASS METHODS OF THIS CLASS SHOULD BE EXACTLY THE POSSIBLE RANDOMIZATION_METHODs
-  # that require post-processing. Any of these methods should be possible values for
+  # that require post-processing. Any of these methods, together with those
+  # in the PreProcessingRandomizationUtil should be possible values for
   # ENV[RANDOMIZATION_METHOD]
 
   # This is basically a no-op method, to be used if we aren't randomizing
@@ -27,6 +28,7 @@ class PostProcessingRandomizationUtil
   end
 
   def self.uniform(opts)
+    # Generate random creation times over covered timespan:
     Array.new(opts[:new_checkouts].size)
       .map { |ind| rand RandomizationHelperUtil.delta_seconds(opts[:new_checkouts]) }
       .sort
@@ -34,7 +36,23 @@ class PostProcessingRandomizationUtil
       .map { |s| Time.at(Time.now - s).iso8601 }
   end
 
-  # If a randomization method doesn't require any pre-processing, it won't be listed
+  def self.add_randomized_dates!(checkouts)
+    randomization_args = {
+      new_checkout: RandomizationHelperUtil.checkouts_requiring_randomized_date(checkouts),
+      all_checkouts: checkouts
+    }
+    randomized_dates = self.send(ENV['RANDOMIZATION_METHOD'], randomization_args)
+    randomization_args[:new_checkout].each_with_index do |checkout, idx|
+      checkout.randomized_date = randomized_dates[idx]
+    end
+  end
+
+  # An overall main method to process checkouts. Currently we just have to add dates
+  def self.process!(checkouts)
+    self.add_randomized_dates!(checkouts)
+  end
+
+  # If a randomization method doesn't require any post-processing, it won't be listed
   # as a method of this class. method_missing will catch it and execute a no-op (in this case,
   # the 'none' method, corresponding to no randomization). We check that the arguments make sense
   # in order to avoid having this called totally accidentally.
@@ -46,26 +64,12 @@ class PostProcessingRandomizationUtil
     end
   end
 
-
-
-
-  def self.add_randomized_dates!(checkouts)
-    # Generate random creation times over covered timespan:
-    randomization_args = {
-      new_checkout: RandomizationHelperUtil.checkouts_requiring_randomized_date(checkouts),
-      all_checkouts: checkouts
-    }
-    randomized_dates = self.send(ENV['RANDOMIZATION_METHOD'], randomization_args)
-    randomization_args[:new_checkout].each_with_index do |checkout, idx|
-      checkout.randomized_date = randomized_dates[idx]
-    end
-  end
-
 end
 
 class PreProcessingRandomizationUtil
   # THE CLASS METHODS OF THIS CLASS SHOULD BE EXACTLY THE POSSIBLE RANDOMIZATION_METHODs
-  # that require pre-processing. Any of these methods should be possible values for
+  # that require pre-processing. Any of these methods, together with those
+  # in the PostProcessingRandomizationUtil, should be possible values for
   # ENV[RANDOMIZATION_METHOD]
 
   # If a randomization method doesn't require any pre-processing, it won't be listed
@@ -79,5 +83,13 @@ class PreProcessingRandomizationUtil
       .map { |record| [rand, record] }
       .sort { |(float, record)| float}
       .map { |(float, record)| record }
+  end
+
+  # Generates a new array of randomized records using the method named in ENV
+  # The possible values for 'RANDOMIZATION_METHOD' should be exactly names
+  # of those methods in
+  # PreProcessingRandomizationUtil and PostProcessingRandomizationUtil
+  def process(array)
+    self.send(ENV['RANDOMIZATION_METHOD'], records)
   end
 end

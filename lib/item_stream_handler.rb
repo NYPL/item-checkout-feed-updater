@@ -1,6 +1,7 @@
 # require_relative 'errors'
 require_relative 'avro_decoder'
 require_relative 'checkout'
+require_relative 'randomization_util'
 
 class ItemStreamHandler
   MAX_CHECKOUTS_IN_MEMORY = ENV['MAX_CHECKOUTS_IN_MEMORY'].to_i
@@ -61,9 +62,10 @@ class ItemStreamHandler
     update_tally_if_necessary
     checkout_count = 0
 
-    event["Records"]
+    records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
-      .each do |record|
+    records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
+    records.each do |record|
         avro_data = record["kinesis"]["data"]
 
         decoded = avro_decoder('Item').decode avro_data
@@ -80,6 +82,7 @@ class ItemStreamHandler
           end
         end
       end
+    PostProcessingRandomizationUtil.add_randomized_dates! @checkouts
 
     Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 

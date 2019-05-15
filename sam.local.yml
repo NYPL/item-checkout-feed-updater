@@ -20,4 +20,5 @@ Resources:
           S3_FEED_KEY: 'feed.xml'
           LOG_LEVEL: debug
           TZ: 'America/New_York'
+          RANDOMIZATION_METHOD: 'uniform'
           CHECKOUT_ID_EXPIRE_TIME: 60*60

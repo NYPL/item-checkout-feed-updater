@@ -18,24 +18,6 @@ class S3Writer
     checkout_author.rstrip.gsub(/ +/, " ")
   end
 
-  def delta_seconds(checkouts)
-    # Determine min and max dates of checkouts
-    checkout_dates = checkouts.map { |checkout| checkout.created }.sort
-    min_date = Time.parse checkout_dates.first
-    max_date = Time.parse checkout_dates.last
-    # Determine seconds elapsed between first and last checkout
-    max_date - min_date
-  end
-
-  def creation_dates(checkouts)
-    # Generate random creation times over covered timespan:
-    @creation_dates ||= Array.new(checkouts.size)
-      .map { |ind| rand delta_seconds(checkouts) }
-      .sort
-      .reverse
-      .map { |s| Time.at(Time.now - s).iso8601 }
-  end
-
   def generate_indexes(checkout, xml)
     checkout.tallies.each do |(category, tally)|
       xml['nypl'].index(category, tally)
@@ -53,13 +35,13 @@ class S3Writer
     end
   end
 
-  def assign_checkout_properties(checkout, xml)
+  def assign_checkout_properties!(checkout, xml)
     xml.entry {
       xml.id "#{checkout.id}-#{checkout.barcode}"
       xml.title generate_title(checkout)
       xml.link checkout.link if checkout.has? :link
       # Assign somewhat random checkout time:
-      xml.updated @creation_dates.shift
+      xml.updated checkout.randomized_date
       xml['dcterms'].title checkout.title if checkout.has? :title
       xml['dc'].contributor checkout.author if checkout.has? :author
       xml['dc'].identifier "urn:isbn:#{checkout.isbn}" if checkout.has? :isbn
@@ -71,7 +53,6 @@ class S3Writer
   end
 
   def feed_xml(checkouts)
-    creation_dates(checkouts)
     builder = Nokogiri::XML::Builder.new do |xml|
       xml.feed(
         'xmlns' => "http://www.w3.org/2005/Atom",
@@ -86,7 +67,7 @@ class S3Writer
           xml.updated Time.now
           xml['nypl'].tallies { generate_tallies(xml) }
           checkouts.each do |checkout|
-            assign_checkout_properties(checkout, xml)
+            assign_checkout_properties!(checkout, xml)
           end
         }
     end

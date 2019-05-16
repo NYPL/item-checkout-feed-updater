@@ -46,7 +46,7 @@ class PostProcessingRandomizationUtil
       all_checkouts: checkouts
     }
     randomized_dates = self.send(ENV['RANDOMIZATION_METHOD'], randomization_args)
-    randomization_args[:new_checkout].each_with_index do |checkout, idx|
+    randomization_args[:new_checkouts].each_with_index do |checkout, idx|
       checkout.randomized_date = randomized_dates[idx]
     end
   end

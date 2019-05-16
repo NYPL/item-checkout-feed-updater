@@ -1,3 +1,5 @@
+require_relative 'randomization_util'
+
 class ItemHandlerRecords
 
   attr_accessor :records

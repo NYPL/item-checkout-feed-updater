@@ -34,7 +34,7 @@ class ItemStreamHandler
     end
   end
 
-  def cleanup
+  def clear_old_data
     clear_tally_if_necessary
     remove_old_ids RECENT_IDS
     # Make sure @checkouts doesn't grow behond max:
@@ -80,7 +80,7 @@ class ItemStreamHandler
 
 
   def handle(event)
-    cleanup
+    clear_old_data
     checkouts = get_checkouts_from_event(event)
     checkouts.each do |checkout|
       process_checkout(checkout)

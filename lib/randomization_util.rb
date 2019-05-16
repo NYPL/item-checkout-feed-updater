@@ -29,7 +29,7 @@ class PostProcessingRandomizationUtil
 
   def self.uniform(opts)
     # Generate random creation times over covered timespan:
-    Array.new(opts[:new_checkouts].size)
+    opts[:new_checkouts]
       .map { |ind| rand RandomizationHelperUtil.delta_seconds(opts[:new_checkouts]) }
       .sort
       .reverse
@@ -42,7 +42,7 @@ class PostProcessingRandomizationUtil
     # method named in ENV. Right now none of the randomization methods actually care about
     # the all_checkouts variable, but it might be a useful context variable in the future
     randomization_args = {
-      new_checkout: RandomizationHelperUtil.checkouts_requiring_randomized_date(checkouts),
+      new_checkouts: RandomizationHelperUtil.checkouts_requiring_randomized_date(checkouts),
       all_checkouts: checkouts
     }
     randomized_dates = self.send(ENV['RANDOMIZATION_METHOD'], randomization_args)

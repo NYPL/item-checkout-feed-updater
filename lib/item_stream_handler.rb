@@ -64,12 +64,7 @@ class ItemStreamHandler
 
   def get_checkouts_from_event(event)
     ItemHandlerRecords.new(raw_records(event))
-      .randomize_records!
-      .decode_records!
-      .select_checkouts!
-      .build_checkouts!
-      .reject_duplicates!
-      .records
+      .process
   end
 
   def process_checkout(checkout)

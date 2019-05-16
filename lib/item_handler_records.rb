@@ -36,4 +36,13 @@ class ItemHandlerRecords
     end
   end
 
+  def process
+    randomize_records!
+    decode_records!
+    select_checkouts!
+    build_checkouts!
+    reject_duplicates!
+    records
+  end
+
 end

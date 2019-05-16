@@ -64,18 +64,22 @@ class ItemStreamHandler
 
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
+    Application.logger.info "Records before randomization: #{records}"
     records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
+    Application.logger.info "Records after randomization #{records}"
     records.each do |record|
         avro_data = record["kinesis"]["data"]
 
         decoded = avro_decoder('Item').decode avro_data
-
+        Application.logger.info "decoded: #{decoded}"
         # Presence of 'duedate' indicates it's checked-out
         if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
           checkout = Checkout.from_item_record decoded
+          Application.logger.info "De-duping: #{checkout.id}, #{RECENT_IDS}"
           unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
             add_checkout checkout
             checkout_count += 1
+            Application.logger.info "Added checkout to count"
             update_count checkout
             RECENT_IDS[checkout.id] = Time.now
             remove_old_ids RECENT_IDS

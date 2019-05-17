@@ -55,6 +55,15 @@ class ItemStreamHandler
     end
   end
 
+  # Returns true if given item appears to represent a recent checkout. Must:
+  #  - be a Hash
+  #  - have a non-nil status.duedate
+  #  - have an id
+  def item_is_checkout? (item)
+    item.is_a?(Hash) &&
+      item['status'].is_a?(Hash) && ! item['status']['duedate'].nil? &&
+      item['id'].is_a?(String)
+  end
 
   # Handle storage of proxied requests
   def handle (event)
@@ -68,25 +77,30 @@ class ItemStreamHandler
     records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
     Application.logger.info "Records after randomization #{records}"
     records.each do |record|
-        avro_data = record["kinesis"]["data"]
+      avro_data = record["kinesis"]["data"]
 
-        decoded = avro_decoder('Item').decode avro_data
-        Application.logger.info "decoded: #{decoded}"
-        # Presence of 'duedate' indicates it's checked-out
-        if decoded && decoded['status'] && ! decoded['status']['duedate'].nil?
-          checkout = Checkout.from_item_record decoded
-          Application.logger.info "De-duping: #{checkout.id}, #{RECENT_IDS}"
-          unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
-            add_checkout checkout
-            checkout_count += 1
-            Application.logger.info "Added checkout to count"
-            update_count checkout
-            RECENT_IDS[checkout.id] = Time.now
-            remove_old_ids RECENT_IDS
-          end
+      decoded = avro_decoder('Item').decode avro_data
+
+      Application.logger.info "ItemStreamHandler#handle decoded item: #{decoded}"
+
+      if item_is_checkout? decoded
+        checkout = Checkout.from_item_record decoded
+
+        Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
+        unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+          add_checkout checkout
+          checkout_count += 1
+          Application.logger.info "Added checkout to count"
+          update_count checkout
+
+          RECENT_IDS[checkout.id] = Time.now
+          remove_old_ids RECENT_IDS
         end
+      else
+        Application.logger.debug "ItemStreamHandler#handle skipping non-checkout item: #{decoded}"
       end
-    PostProcessingRandomizationUtil.add_randomized_dates! @checkouts
+    end
+    PostProcessingRandomizationUtil.add_randomized_dates!(@checkouts) unless @checkouts.nil?
 
     Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 

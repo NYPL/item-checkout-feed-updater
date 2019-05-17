@@ -74,9 +74,7 @@ class ItemStreamHandler
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
 
-    Application.logger.debug "ItemStreamHandler#handle: Records before randomization: #{records}"
-    records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
-    Application.logger.debug "ItemStreamHandler#handle: Records after randomization #{records}"
+    records = PreProcessingRandomizationUtil.process(records)
 
     records.each do |record|
       avro_data = record["kinesis"]["data"]
@@ -102,7 +100,7 @@ class ItemStreamHandler
         Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{decoded}"
       end
     end
-    PostProcessingRandomizationUtil.add_randomized_dates!(@checkouts) unless @checkouts.nil?
+    PostProcessingRandomizationUtil.process! @checkouts unless @checkouts.nil?
 
     Application.logger.info "ItemStreamHandler#handle: Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 

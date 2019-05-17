@@ -21,7 +21,7 @@ class ItemStreamHandler
     # Add checkout to end:
     @checkouts << checkout
 
-    Application.logger.debug "Collected checkouts size is now #{@checkouts.size}"
+    Application.logger.debug "ItemStreamHandler#add_checkout: Collected checkouts size is now #{@checkouts.size}"
 
     # Make sure @checkouts doesn't grow behond max:
     @checkouts = constrain_size @checkouts, MAX_CHECKOUTS_IN_MEMORY
@@ -73,15 +73,17 @@ class ItemStreamHandler
 
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
-    Application.logger.info "Records before randomization: #{records}"
+
+    Application.logger.debug "ItemStreamHandler#handle: Records before randomization: #{records}"
     records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
-    Application.logger.info "Records after randomization #{records}"
+    Application.logger.debug "ItemStreamHandler#handle: Records after randomization #{records}"
+
     records.each do |record|
       avro_data = record["kinesis"]["data"]
 
       decoded = avro_decoder('Item').decode avro_data
 
-      Application.logger.info "ItemStreamHandler#handle decoded item: #{decoded}"
+      Application.logger.info "ItemStreamHandler#handle: Decoded item: #{decoded}"
 
       if item_is_checkout? decoded
         checkout = Checkout.from_item_record decoded
@@ -90,19 +92,19 @@ class ItemStreamHandler
         unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
           add_checkout checkout
           checkout_count += 1
-          Application.logger.info "Added checkout to count"
+          Application.logger.info "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
           update_count checkout
 
           RECENT_IDS[checkout.id] = Time.now
           remove_old_ids RECENT_IDS
         end
       else
-        Application.logger.debug "ItemStreamHandler#handle skipping non-checkout item: #{decoded}"
+        Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{decoded}"
       end
     end
     PostProcessingRandomizationUtil.add_randomized_dates!(@checkouts) unless @checkouts.nil?
 
-    Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
+    Application.logger.info "ItemStreamHandler#handle: Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 
     # If any changes occurred, push latest to S3 via S3Writer
     Application.s3_writer.write @checkouts if checkout_count > 0

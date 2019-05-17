@@ -72,9 +72,8 @@ class S3Writer
         }
     end
 
-    Application.logger.debug "Entry #{builder.to_xml}"
+    Application.logger.debug "S3Writer#feed_xml: Entry #{builder.to_xml}"
 
-    # Application.logger.debug "Check out entry: #{entry}"
     builder.to_xml
   end
 

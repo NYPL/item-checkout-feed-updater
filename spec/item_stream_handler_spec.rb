@@ -53,13 +53,19 @@ describe ItemStreamHandler do
       before(:each) do
         item_stream_handler = ItemStreamHandler.new
         ItemStreamHandler::RECENT_IDS.clear
+
         ENV['CHECKOUT_ID_EXPIRE_TIME'] = '1000000'
+
         allow(mock_decoder).to receive(:decode).and_return(decoded_data)
         allow(AvroDecoder).to receive(:by_name).and_return(mock_decoder)
+
         allow(mock_checkout).to receive(:id).and_return(1)
         allow(mock_checkout).to receive(:categories).and_return(['Book'])
         allow(mock_checkout).to receive(:tallies).and_return({})
+        allow(mock_checkout).to receive(:barcode).and_return('1234')
+        allow(mock_checkout).to receive(:title).and_return('Book Title')
         allow(Checkout).to receive(:from_item_record).and_return(mock_checkout)
+
         mock_s3_writer = instance_double(S3Writer)
         allow(mock_s3_writer).to receive(:write)
         allow(Application).to receive(:s3_writer).and_return(mock_s3_writer)

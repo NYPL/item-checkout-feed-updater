@@ -1,0 +1,11 @@
+language:
+- ruby
+install:
+- bundle install
+cache:
+- bundler
+script:
+- LOG_LEVEL=error bundle exec rspec -f d
+notifications:
+  email:
+    on_failure: always

@@ -83,7 +83,7 @@ class ItemStreamHandler
 
       decoded = avro_decoder('Item').decode avro_data
 
-      Application.logger.info "ItemStreamHandler#handle: Decoded item: #{decoded}"
+      Application.logger.debug "ItemStreamHandler#handle: Decoded item: #{decoded}"
 
       if item_is_checkout? decoded
         checkout = Checkout.from_item_record decoded
@@ -92,7 +92,7 @@ class ItemStreamHandler
         unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
           add_checkout checkout
           checkout_count += 1
-          Application.logger.info "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
+          Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
           update_count checkout
 
           RECENT_IDS[checkout.id] = Time.now

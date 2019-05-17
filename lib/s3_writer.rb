@@ -4,8 +4,8 @@ require 'nokogiri'
 require_relative 's3_client'
 
 class S3Writer
-  def s3_client
-    @s3_client ||= S3Client.new if @s3_client.nil?
+  def get_s3_client
+    @s3_client ||= S3Client.new
   end
 
   def get_author(authorString)
@@ -82,7 +82,7 @@ class S3Writer
     xml = feed_xml checkouts
     Application.logger.debug "Generated atom feed: #{xml}"
     if ENV['S3_FEED_KEY']
-      s3_client.write ENV['S3_FEED_KEY'], xml
+      get_s3_client.write ENV['S3_FEED_KEY'], xml
     else
       Application.logger.error "No ENV['S3_FEED_KEY'] configured!"
     end

@@ -10,14 +10,14 @@ class S3Client
 
   def write(path, data)
     bucket = @s3.bucket(ENV['S3_BUCKET_NAME'])
-    Application.logger.debug "Writing #{data} to #{ENV['S3_BUCKET_NAME']}/#{path}"
+    Application.logger.debug "S3Client#write: Writing #{data} to #{ENV['S3_BUCKET_NAME']}/#{path}"
     response = bucket.object(ENV['S3_FEED_KEY']).put({
       acl: 'public-read',
       body: data
     })
     # `response` is a PutObjectOutput:
     # https://docs.aws.amazon.com/sdkforruby/api/Aws/S3/Types/PutObjectOutput.html
-    Application.logger.debug "Wrote to bucket: #{response}"
+    Application.logger.debug "S3Client#wrote: Wrote to bucket: #{response}"
     response
   end
 

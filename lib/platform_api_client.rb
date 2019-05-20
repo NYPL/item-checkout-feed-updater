@@ -25,7 +25,7 @@ class PlatformApiClient
 
     uri = URI.parse("#{ENV['PLATFORM_API_BASE_URL']}#{path}")
 
-    Application.logger.debug "Getting from platform api", { uri: uri }
+    Application.logger.debug "PlatformApiClient#get", { uri: uri }
 
     begin
       request = Net::HTTP::Get.new(uri)

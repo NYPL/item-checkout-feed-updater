@@ -45,7 +45,7 @@ class CheckoutBuilderUtil
     response = Application.platform_api_client.get "bibs/#{item['nyplSource']}/#{item['bibIds'].first}"
     return nil unless response && response['data']
     bib = response['data']
-    Application.logger.debug "Got bib for item #{item['id']}: #{bib.to_json}"
+    Application.logger.debug "CheckoutBuilderUtil#get_bib: Got bib for item #{item['id']}: #{bib.to_json}"
     bib
   end
 

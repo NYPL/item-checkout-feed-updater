@@ -64,7 +64,7 @@ class ItemStreamHandler
 
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
-    records = PreProcessingRandomizationUtil.send(ENV['RANDOMIZATION_METHOD'], records)
+    records = PreProcessingRandomizationUtil.process(records)
     records.each do |record|
         avro_data = record["kinesis"]["data"]
 
@@ -82,7 +82,7 @@ class ItemStreamHandler
           end
         end
       end
-    PostProcessingRandomizationUtil.add_randomized_dates! @checkouts
+    PostProcessingRandomizationUtil.process! @checkouts
 
     Application.logger.info "Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
 

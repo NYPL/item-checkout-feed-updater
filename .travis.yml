@@ -2,44 +2,10 @@ language:
 - ruby
 install:
 - bundle install
-  # cache:
-  # - bundler
+cache:
+- bundler
 script:
-- LOG_LEVEL=error APP_ENV=test bundle exec rspec -f d
-before_deploy:
-- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
-deploy:
-- provider: lambda
-  function_name: ItemCheckoutFeedUpdater-qa
-  description: Listens on the Item kinesis stream to identify checkouts, which it
-    writes to an atom feed.
-  region: us-east-1
-  role: arn:aws:iam::946183545209:role/lambda-full-access
-  runtime: ruby2.5
-  module_name: application
-  handler_name: handle_event
-  timeout: 30
-  environment_variables:
-  - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
-  - NYPL_OAUTH_URL=https://isso.nypl.org/
-  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJgrQmkr7pQa4WSF1gIBEIAnLgWjuqFllMpCQWGT/eC/7n/pxFN87zaoJF19zCRHH/ulh4BICTZf
-  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx8ZuLftGsgDmOxxBICARCAQ3ZSNw6hWlqI73kLJcs8Zg3O13PKiATfXXDUvGFim/KolFmQDCsVp7JFF9Jg01U++KNtcGJiVev7z3OAPNXc3fqGp6k=
-  - MAX_CHECKOUTS_IN_MEMORY=100
-  - S3_BUCKET_NAME=item-checkout-feed-qa
-  - S3_FEED_KEY=feed.xml
-  - LOG_LEVEL=info
-  skip_cleanup: true
-  access_key_id: "$AWS_ACCESS_KEY_ID_QA"
-  secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
-  on:
-    branch: qa
+- LOG_LEVEL=error bundle exec rspec -f d
 notifications:
   email:
     on_failure: always
-env:
-  global:
-  - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
-  - AWS_DEFAULT_REGION=us-east-1
-  - secure: tA/soIO8IiN/fqbvemLWWHUlcViKLrRJhMciWETz76q/FME6u+pBxwSVhLTSSednp84ucKO+OOnQJgTSGSwE7ddBh1yHGvKxeBspUg49GxBLXvbJomernjBROgvf1yt4is+ut8PBOZQAMKn6O75RGYo0lI9UWxXZm6CYMi2N6FnGl1soL1NyxQYz/MV38lAe3wf4CooehfuW/yOGnrFa4x5JRd1UWUfLXq31bIKJ2QQLFM2DWueKvt1twiT8Pt9eG9ur2sZzVkhUTvTO7ctzWH5h7oxwOLEFUvQA7gmGfgwt9VIxHUZkazF3u8z3QSXJk5yOG2deh7opUmIhL1XWt/HLKSP8caDkyu3nfo5pqB8bGz05B3dcllv/sTAn8dpQ0GP/5VHppvlP8qz6BQDIxWii5z2l3GXd/iM9DLktLadKlz2FC/9rnzLoHMyHMETCSTjXw6n+Qi8XETgs4qx9zIaryz/DuxY8XJ6qMI4dLOCzP162skbDw7GT1m0hBeEWWY9yqfMZhvg41JtUhD2BJyga4biI4SFt+MZwi7IU5qtqxJcWt9gFMaTmIP6286LSBmut5+oBuCo8pbjs7uSyIAyhMExMzxzHZyQ9eZ17kZs8oew0RzoipT5+S1MNjcBBTV63ENu9pr7OQG87UczqSCXqn5sTT7VLtm9B4lgW9zY=
-  - secure: G7JJflWd7ThhU0AoyMTjUZzH22TCj/op1cWE8C2OVCjWtNVF44H3EuID+Ay5NdA4KJ/HrKCqmGbQekU4CXFzLLpuTgmrNdld30R6Jnd2siuOG54Rzsr37duTtlBTV4fOaug9z8KPRhjx6Lf6Nbh4ByBx9mlqVk+1XWgZWM8IdgJX67f2j2pWYkVDK0J+yOSLXbnYai8Is9PZB34VGVk3hpRWLN16pt2DEucIwOROuIout07iSugDDNOk+y6ABwPIdueKrZ5hpwmp8DX+NBEIlmrd4jKgP2j99Fzi6tzyBiIYiTaHLN4AI5dyyomACGxX77znmuthINYR2s+3cXDlu7PUfvGEUrq5PHpa6RMVzrmvN/45EqGS9ZW3KAtvs15Y0GOdO0a17oyWCKGLlQGJC9nyeKF8QndbaFL6B2D/FDO/vZm9aCHr9ngB8gCh8vGW+UkyRCT7NlBn/W9SQLoCgRWctiR7aDq9Sbb0ruj9PLpQRPX+bU+wxDiQmgPBR6WYzRTtKuUSsGmX8JRIeJaHH0O2pitZ72NEpK4r/xf8Eyc6WjClYaK40MSLCnJsQUsL6Pt/vYq4W2GkV1Z+OGO65xobf0V2RELBpNBUKeaWQdlkcubSQajZp1aJW281LWeU6K2ScYGelsICFNpLhJYFFcs/VlSJligf54l+ezekzLM=
-  - secure: QnVSHPqruWLaPFtXO9GSDlXTfyE7ZqmIe8/J908irqKW3SVqJlFTk7Op8bWVpKvDY8kRdaVvTecF1tJIJyE3BP6SJeyJu3At6Q4dosTBwOMlHugUibj1x+ChI0mIRUcAovWBqnuUDnfNtPyFkHb6KXIl/IUGGOGISKL5Og/YCrBwEt7P32GjH4C5rIgSg1bZqcM0vSYyUg46Xi92WKQtT8luAjESbO4V/DQGxsCpDNZFFg3s12T5RN4IgAeKcxU9OIzGbsvlSy89mvrL567S6H6nq0hsiBokROYwXbJ7jz8aS+K3UQF6tBEyNUBosKcjvZ1rWaDPs5uS9z8nF1byIajVMmVZQcCB3eK5LID9g0MjWdXgsWewX2UaRR6FEJ942n1JynAEV+p6ZUS/8MktSmdrtxbtJNtF3Bw9UEJ2/JeAiCZ6/am/0U8o2ADELu6WkQIjKjgitynfv+kf+xSeERrlKatCFuRv0Y6Bf/bdItkbJ2O7O2/Kr9EQ/USW5HypzrYirhY3PSgInerrqbpxV+kj+PYzzp4uvpCbzs6NLvhUVbntdeR9b26jYN2YQLnwmGeQNdDc/4HEFWjfh7aB9vAreOo+yZJKmn84SMCc27+I6xfWOGyZB5oDFfYKiC/KdlSLbDCcI2V9Ooc5SsYdytOzetjL/AnJiSARbOWMPcg=

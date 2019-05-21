@@ -20,17 +20,12 @@ class ItemStreamHandler
     @checkouts << checkout
 
     Application.logger.debug "ItemStreamHandler#add_checkout: Collected checkouts size is now #{@checkouts.size}"
-
-    # Make sure @checkouts doesn't grow behond max:
-    @checkouts = constrain_size @checkouts, MAX_CHECKOUTS_IN_MEMORY
   end
 
   # Reduce array to the given size
   # e.g. constrain_size([1, 2, 3], 2) => [2, 3]
   def constrain_size(arr, size)
-    excess_records = arr.size - size
-    arr.shift excess_records if excess_records > 0
-    arr
+    arr.shift(arr.size - size) if arr
   end
 
   def update_tally_if_necessary
@@ -93,9 +88,14 @@ class ItemStreamHandler
       .each { |checkout| RECENT_IDS[checkout.id] = Time.now }
   end
 
-  def handle (event)
-
+  def clear_old_data
     update_tally_if_necessary
+    constrain_size @checkouts, MAX_CHECKOUTS_IN_MEMORY
+    remove_old_ids RECENT_IDS
+  end
+
+  def handle (event)
+    clear_old_data
     decoded_records = get_decoded_records event
     checkouts = convert_record_to_checkout decoded_records
     checkouts = process_checkouts checkouts

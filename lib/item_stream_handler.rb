@@ -60,52 +60,53 @@ class ItemStreamHandler
   #  - have a non-nil status.duedate
   #  - have an id
   def item_is_checkout? (item)
-    item.is_a?(Hash) &&
+    is_checkout = item.is_a?(Hash) &&
       item['status'].is_a?(Hash) && ! item['status']['duedate'].nil? &&
       item['id'].is_a?(String)
+    Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{item}" unless is_checkout
+    is_checkout
   end
 
-  # Handle storage of proxied requests
-  def handle (event)
-
-    update_tally_if_necessary
-    checkout_count = 0
-
+  def get_decoded_records(event)
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
 
+
     records = PreProcessingRandomizationUtil.process(records)
 
-    records.each do |record|
-      avro_data = record["kinesis"]["data"]
+    decoded_records = records
+      .map { |record| avro_decoder('Item').decode record["kinesis"]["data"] }
+      .each { |decoded_record| Application.logger.debug "ItemStreamHandler#handle: Decoded item: #{decoded_record}" }
+  end
 
-      decoded = avro_decoder('Item').decode avro_data
+  def convert_record_to_checkout(decoded_records)
+    decoded_records
+      .select { |decoded| item_is_checkout? decoded }
+      .map { |decoded| Checkout.from_item_record decoded }
+  end
 
-      Application.logger.debug "ItemStreamHandler#handle: Decoded item: #{decoded}"
+  def process_checkouts(checkouts)
+    checkouts
+      .each { |checkout| Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}" }
+      .select { |checkout| RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i }
+      .each { |checkout| add_checkout checkout }
+      .each { |checkout| Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\"" }
+      .each { |checkout| update_count checkout }
+      .each { |checkout| RECENT_IDS[checkout.id] = Time.now }
+  end
 
-      if item_is_checkout? decoded
-        checkout = Checkout.from_item_record decoded
+  def handle (event)
 
-        Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
-        unless RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
-          add_checkout checkout
-          checkout_count += 1
-          Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
-          update_count checkout
-
-          RECENT_IDS[checkout.id] = Time.now
-          remove_old_ids RECENT_IDS
-        end
-      else
-        Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{decoded}"
-      end
-    end
+    update_tally_if_necessary
+    decoded_records = get_decoded_records event
+    checkouts = convert_record_to_checkout decoded_records
+    checkouts = process_checkouts checkouts
     PostProcessingRandomizationUtil.process! @checkouts unless @checkouts.nil?
 
-    Application.logger.info "ItemStreamHandler#handle: Processed #{event['Records'].size} records (#{checkout_count} checkouts)"
+    Application.logger.info "ItemStreamHandler#handle: Processed #{event['Records'].size} records (#{checkouts.count} checkouts)"
 
     # If any changes occurred, push latest to S3 via S3Writer
-    Application.s3_writer.write @checkouts if checkout_count > 0
+    Application.s3_writer.write @checkouts if checkouts.count > 0
 
     { success: true }
   end

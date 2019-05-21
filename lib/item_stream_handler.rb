@@ -16,8 +16,6 @@ class ItemStreamHandler
   def add_checkout(checkout)
     @checkouts ||= []
 
-    # Application.logger.debug "Adding checkout #{checkout}"
-
     # Add checkout to end:
     @checkouts << checkout
 

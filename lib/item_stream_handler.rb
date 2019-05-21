@@ -88,7 +88,7 @@ class ItemStreamHandler
   def process_checkouts(checkouts)
     checkouts
       .each { |checkout| Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}" }
-      .select { |checkout| RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id]< ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i }
+      .reject { |checkout| RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i }
       .each { |checkout| add_checkout checkout }
       .each { |checkout| Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\"" }
       .each { |checkout| update_count checkout }

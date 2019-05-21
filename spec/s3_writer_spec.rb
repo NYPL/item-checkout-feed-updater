@@ -12,7 +12,8 @@ describe S3Writer do
         allow(S3Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:write).and_return({ "stuff" => true })
 
-        load File.join('application.rb')
+        Application.platform_api_client = PlatformApiClient.new
+        Application.s3_writer = S3Writer.new
       end
 
       it 'generates feed' do
@@ -44,7 +45,8 @@ describe S3Writer do
         allow(S3Client).to receive(:new).and_return(mock_s3_client)
         allow(mock_s3_client).to receive(:write).and_return({ "stuff" => true })
 
-        load File.join('application.rb')
+        Application.platform_api_client = PlatformApiClient.new
+        Application.s3_writer = S3Writer.new
       end
 
       it 'generates feed' do

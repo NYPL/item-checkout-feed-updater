@@ -7,7 +7,8 @@ describe Checkout do
         mock_api_client = instance_double(PlatformApiClient)
         allow(PlatformApiClient).to receive(:new).and_return(mock_api_client)
         allow(mock_api_client).to receive(:get).and_return({ "data" => fixture('bib-laptop.json') })
-        load File.join('application.rb')
+
+        Application.platform_api_client = PlatformApiClient.new
       end
 
       it 'generates laptop checkout' do
@@ -29,7 +30,8 @@ describe Checkout do
         mock_api_client = instance_double(PlatformApiClient)
         allow(PlatformApiClient).to receive(:new).and_return(mock_api_client)
         allow(mock_api_client).to receive(:get).and_return({ "data" => fixture('bib-cee-lo.json') })
-        load File.join('application.rb')
+
+        Application.platform_api_client = PlatformApiClient.new
       end
 
       it 'generates cee-lo album checkout' do

@@ -10,6 +10,7 @@ class ItemHandlerRecords
     @records = records_array
   end
 
+  # Get AvroDecoder instance by schema name
   def avro_decoder(name)
     @avro_decoders = {} if @avro_decoders.nil?
     @avro_decoders[name] = AvroDecoder.by_name(name) if @avro_decoders[name].nil?
@@ -28,10 +29,6 @@ class ItemHandlerRecords
     end
   end
 
-  # Select checkouts from event data matching:
-  #  - be a Hash
-  #  - have a non-nil status.duedate
-  #  - have an id
   def select_checkouts!
     self.records = records.select do |record|
       self.class.item_is_checkout? record
@@ -51,6 +48,8 @@ class ItemHandlerRecords
     end
   end
 
+  # "Record" current set of records as the complete set of valid, vetted
+  # checkouts.
   def record_recents!
     self.records.each do |checkout|
       RECENT_IDS[checkout.id] = Time.now
@@ -76,11 +75,15 @@ class ItemHandlerRecords
     end
   end
 
+  # Returns true if given object appears to be a checkout.
+  # Must:
+  #  - be a Hash
+  #  - have a non-nil status.duedate
+  #  - have an id
   def self.item_is_checkout?(record)
-    res = record.is_a?(Hash) &&
+    record.is_a?(Hash) &&
     record['status'].is_a?(Hash) && !record['status']['duedate'].nil? &&
     record['id'].is_a?(String)
-    res
   end
 
 end

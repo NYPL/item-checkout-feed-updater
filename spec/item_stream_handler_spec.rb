@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe ItemStreamHandler do
-
-
   describe '#handle' do
     describe 'deduping based on ids' do
       ItemTypeTally = {

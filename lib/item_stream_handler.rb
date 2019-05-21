@@ -8,13 +8,13 @@ class ItemStreamHandler
   RECENT_IDS = {}
 
   def avro_decoder(name)
-    @avro_decoders = {} if @avro_decoders.nil?
-    @avro_decoders[name] = AvroDecoder.by_name(name) if @avro_decoders[name].nil?
+    @avro_decoders ||= {}
+    @avro_decoders[name] ||= AvroDecoder.by_name(name)
     @avro_decoders[name]
   end
 
   def add_checkout(checkout)
-    @checkouts = [] if @checkouts.nil?
+    @checkouts ||= []
 
     # Application.logger.debug "Adding checkout #{checkout}"
 

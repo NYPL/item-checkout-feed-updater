@@ -6,6 +6,31 @@ cache:
 - bundler
 script:
 - LOG_LEVEL=error bundle exec rspec -f d
+deploy:
+- provider: lambda
+  function_name: ItemCheckoutFeedUpdater-test
+  description: "A listener on the Item stream that produces an item checkouts feed"
+  region: us-east-1
+  role: arn:aws:iam::224280085904:role/lambda_basic_execution
+  runtime: ruby2.5
+  module_name: app
+  handler_name: handle_event
+  environment_variables:
+  - LOG_LEVEL=debug
+  - MAX_CHECKOUTS_IN_MEMORY=100
+  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJgrQmkr7pQa4WSF1gIBEIAnLgWjuqFllMpCQWGT/eC/7n/pxFN87zaoJF19zCRHH/ulh4BICTZf
+  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx8ZuLftGsgDmOxxBICARCAQ3ZSNw6hWlqI73kLJcs8Zg3O13PKiATfXXDUvGFim/KolFmQDCsVp7JFF9Jg01U++KNtcGJiVev7z3OAPNXc3fqGp6k
+  - NYPL_OAUTH_URL=https://isso.nypl.org/
+  - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
+  - RANDOMIZATION_METHOD=uniform
+  - S3_BUCKET_NAME=checkout-feed-test
+  - S3_FEED_KEY=feed.xml
+  - TZ=America/New_York
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID_QA"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
+  on:
+    branch: test-deploy
 notifications:
   email:
     on_failure: always

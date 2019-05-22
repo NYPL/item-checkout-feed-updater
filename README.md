@@ -69,3 +69,4 @@ Steps to deploy:
 1. `exit` out of that
 1. Bake up a zip file: `zip -r ../item-checkout-feed-updater.zip *` and upload it to the lambda
 1. Make sure ENV vars, handler, and execution time are set correctly
+

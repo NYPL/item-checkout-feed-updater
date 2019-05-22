@@ -8,7 +8,7 @@ script:
 - LOG_LEVEL=error bundle exec rspec -f d
 deploy:
 - provider: lambda
-  function_name: ItemCheckoutFeedUpdater-test
+  function_name: ItemCheckoutFeedUpdater-test2
   description: A listener on the Item stream that produces an item checkouts feed
   region: us-east-1
   role: arn:aws:iam::224280085904:role/lambda_basic_execution

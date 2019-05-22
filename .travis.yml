@@ -12,8 +12,8 @@ before_install:
 - docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
 deploy:
 - provider: lambda
-  function_name: ItemCheckoutFeedUpdater-test
-  description: A listener on the Item stream that produces an item checkouts feed
+  function_name: ItemCheckoutFeedUpdater-qa
+  description: Builds a "checkouts" feed hosted in S3 from Item event stream
   region: us-east-1
   role: arn:aws:iam::946183545209:role/lambda-full-access
   runtime: ruby2.5
@@ -22,19 +22,43 @@ deploy:
   environment_variables:
   - LOG_LEVEL=debug
   - MAX_CHECKOUTS_IN_MEMORY=100
-  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAGowaAYJKoZIhvcNAQcGoFswWQIBADBUBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDJgrQmkr7pQa4WSF1gIBEIAnLgWjuqFllMpCQWGT/eC/7n/pxFN87zaoJF19zCRHH/ulh4BICTZf
-  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAx8ZuLftGsgDmOxxBICARCAQ3ZSNw6hWlqI73kLJcs8Zg3O13PKiATfXXDUvGFim/KolFmQDCsVp7JFF9Jg01U++KNtcGJiVev7z3OAPNXc3fqGp6k
+  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=
+  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwbUQIGDi3r/uU3ru0CARCAQ2XhqZ/dW0v2s5jhNfNaZpC6x3B+Femv6+v0F3wLHuyYFo5EblXZ0A+Ynf8YZRvjAdX2XXaeZCzVAj1qE1sAr6263/I=
   - NYPL_OAUTH_URL=https://isso.nypl.org/
   - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
   - RANDOMIZATION_METHOD=uniform
-  - S3_BUCKET_NAME=item-checkout-feed-lockdown-test
+  - S3_BUCKET_NAME=item-checkout-feed-qa2
   - S3_FEED_KEY=feed.xml
   - TZ=America/New_York
   skip_cleanup: true
   access_key_id: "$AWS_ACCESS_KEY_ID_QA"
   secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
   on:
-    branch: test-deploy
+    branch: qa
+- provider: lambda
+  function_name: ItemCheckoutFeedUpdater-production
+  description: Builds a "checkouts" feed hosted in S3 from Item event stream
+  region: us-east-1
+  role: arn:aws:iam::946183545209:role/lambda-full-access
+  runtime: ruby2.5
+  module_name: application
+  handler_name: handle_event
+  environment_variables:
+  - LOG_LEVEL=debug
+  - MAX_CHECKOUTS_IN_MEMORY=100
+  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=
+  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwbUQIGDi3r/uU3ru0CARCAQ2XhqZ/dW0v2s5jhNfNaZpC6x3B+Femv6+v0F3wLHuyYFo5EblXZ0A+Ynf8YZRvjAdX2XXaeZCzVAj1qE1sAr6263/I=
+  - NYPL_OAUTH_URL=https://isso.nypl.org/
+  - PLATFORM_API_BASE_URL=https://platform.nypl.org/api/v0.1/
+  - RANDOMIZATION_METHOD=uniform
+  - S3_BUCKET_NAME=item-checkout-feed-production
+  - S3_FEED_KEY=feed.xml
+  - TZ=America/New_York
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_PRODUCTION"
+  on:
+    branch: master
 notifications:
   email:
     on_failure: always

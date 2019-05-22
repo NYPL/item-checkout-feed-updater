@@ -1,11 +1,15 @@
 language:
 - ruby
+services:
+- docker
 install:
 - bundle install
 cache:
 - bundler
 script:
 - LOG_LEVEL=error bundle exec rspec -f d
+before_install:
+- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
 deploy:
 - provider: lambda
   function_name: ItemCheckoutFeedUpdater-test
@@ -23,7 +27,7 @@ deploy:
   - NYPL_OAUTH_URL=https://isso.nypl.org/
   - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
   - RANDOMIZATION_METHOD=uniform
-  - S3_BUCKET_NAME=checkout-feed-test
+  - S3_BUCKET_NAME=item-checkout-feed-lockdown-test
   - S3_FEED_KEY=feed.xml
   - TZ=America/New_York
   skip_cleanup: true

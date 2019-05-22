@@ -64,9 +64,7 @@ Deployment is a little rough right now because we use Nokogiri for XML generatio
 
 Steps to deploy:
 
-1. Open a shell into the docker container: `docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bash`
-1. run `bundle install --deployment`
-1. `exit` out of that
+1. Open a shell into the docker container: `docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment`
 1. Bake up a zip file: `zip -r ../item-checkout-feed-updater.zip *` and upload it to the lambda
 1. Make sure ENV vars, handler, and execution time are set correctly
 

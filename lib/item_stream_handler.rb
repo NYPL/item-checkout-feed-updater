@@ -25,7 +25,7 @@ class ItemStreamHandler
   # Reduce array to the given size
   # e.g. constrain_size([1, 2, 3], 2) => [2, 3]
   def constrain_size(arr, size)
-    arr.shift(arr.size - size) if arr
+    arr.shift(arr.size - size) if arr && arr.size > size
   end
 
   def update_tally_if_necessary

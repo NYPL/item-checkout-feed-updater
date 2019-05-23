@@ -21,7 +21,7 @@ bundle install; bundle install --deployment
 
 ### Setup
 
-All config is in sam.[ENVIRONMENT].yml templates, encrypted as necessary.
+Local config is managed in `sam.local.yml`.
 
 ## Contributing
 

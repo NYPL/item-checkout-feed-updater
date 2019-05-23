@@ -16,7 +16,7 @@ describe Checkout do
 
         expect(checkout).to be_a(Checkout)
         expect(checkout.id).to eq('34132673')
-        expect(checkout.created).to eq('2019-04-10T17:36:22-04:00')
+        expect(checkout.created).to eq('2019-04-10T17:36:22-00:00')
         expect(checkout.isbn).to be_nil
         expect(checkout.barcode).to eq('33333406215299')
         expect(checkout.title).to eq('Laptops.')
@@ -39,7 +39,7 @@ describe Checkout do
 
         expect(checkout).to be_a(Checkout)
         expect(checkout.id).to eq('25855062')
-        expect(checkout.created).to eq('2019-04-10T20:52:48-04:00')
+        expect(checkout.created).to eq('2019-04-10T20:52:48-00:00')
         expect(checkout.isbn).to be_nil
         expect(checkout.barcode).to eq('33333289418770')
         expect(checkout.title).to eq('The lady killer [sound recording]')
@@ -49,4 +49,3 @@ describe Checkout do
     end
   end
 end
-

@@ -12,6 +12,13 @@ class RandomizationHelperUtil
     checkouts.select { |checkout| !checkout.randomized_date }
   end
 
+  def self.last_time(checkouts)
+    checkouts
+      .map { |checkout| Time.parse(checkout.created) }
+      .sort
+      .last
+  end
+
 end
 
 class PostProcessingRandomizationUtil
@@ -29,11 +36,12 @@ class PostProcessingRandomizationUtil
 
   def self.uniform(opts)
     # Generate random creation times over covered timespan:
+    last_time = RandomizationHelperUtil.last_time opts[:new_checkouts]
     opts[:new_checkouts]
       .map { |ind| rand RandomizationHelperUtil.delta_seconds(opts[:new_checkouts]) }
       .sort
       .reverse
-      .map { |s| Time.at(Time.now - s).iso8601 }
+      .map { |s| Time.at(last_time - s).iso8601 }
   end
 
   def self.add_randomized_dates!(checkouts)

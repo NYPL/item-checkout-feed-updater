@@ -23,7 +23,7 @@ class CheckoutBuilderUtil
     checkout.location_type = self.location_type checkout.item_type
     checkout.id = item['id']
     checkout.barcode = item['barcode']
-    checkout.created = item['updatedDate']
+    checkout.created = item['updatedDate'][0...-6] + "-00:00"
   end
 
   def self.assign_isbn(bib, checkout)

@@ -76,6 +76,7 @@ class ItemStreamHandler
     decoded_records
       .select { |decoded| item_is_checkout? decoded }
       .map { |decoded| Checkout.from_item_record decoded }
+      .compact
   end
 
   def process_checkouts(checkouts)

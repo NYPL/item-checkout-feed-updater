@@ -1,11 +1,69 @@
 language:
 - ruby
+services:
+- docker
 install:
 - bundle install
 cache:
 - bundler
 script:
 - LOG_LEVEL=error bundle exec rspec -f d
+before_install:
+- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
+deploy:
+- provider: lambda
+  function_name: ItemCheckoutFeedUpdater-qa
+  description: Builds a "checkouts" feed hosted in S3 from Item event stream
+  region: us-east-1
+  role: arn:aws:iam::946183545209:role/lambda-full-access
+  runtime: ruby2.5
+  module_name: application
+  handler_name: handle_event
+  environment_variables:
+  - LOG_LEVEL=debug
+  - MAX_CHECKOUTS_IN_MEMORY=100
+  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=
+  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwbUQIGDi3r/uU3ru0CARCAQ2XhqZ/dW0v2s5jhNfNaZpC6x3B+Femv6+v0F3wLHuyYFo5EblXZ0A+Ynf8YZRvjAdX2XXaeZCzVAj1qE1sAr6263/I=
+  - NYPL_OAUTH_URL=https://isso.nypl.org/
+  - PLATFORM_API_BASE_URL=https://qa-platform.nypl.org/api/v0.1/
+  - RANDOMIZATION_METHOD=uniform
+  - S3_BUCKET_NAME=item-checkout-feed-qa2
+  - S3_FEED_KEY=feed.xml
+  - TZ=America/New_York
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID_QA"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_QA"
+  on:
+    branch: qa
+- provider: lambda
+  function_name: ItemCheckoutFeedUpdater-production
+  description: Builds a "checkouts" feed hosted in S3 from Item event stream
+  region: us-east-1
+  role: arn:aws:iam::946183545209:role/lambda-full-access
+  runtime: ruby2.5
+  module_name: application
+  handler_name: handle_event
+  environment_variables:
+  - LOG_LEVEL=debug
+  - MAX_CHECKOUTS_IN_MEMORY=100
+  - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=
+  - NYPL_OAUTH_SECRET=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAIcwgYQGCSqGSIb3DQEHBqB3MHUCAQAwcAYJKoZIhvcNAQcBMB4GCWCGSAFlAwQBLjARBAwbUQIGDi3r/uU3ru0CARCAQ2XhqZ/dW0v2s5jhNfNaZpC6x3B+Femv6+v0F3wLHuyYFo5EblXZ0A+Ynf8YZRvjAdX2XXaeZCzVAj1qE1sAr6263/I=
+  - NYPL_OAUTH_URL=https://isso.nypl.org/
+  - PLATFORM_API_BASE_URL=https://platform.nypl.org/api/v0.1/
+  - RANDOMIZATION_METHOD=uniform
+  - S3_BUCKET_NAME=item-checkout-feed-production
+  - S3_FEED_KEY=feed.xml
+  - TZ=America/New_York
+  skip_cleanup: true
+  access_key_id: "$AWS_ACCESS_KEY_ID_PRODUCTION"
+  secret_access_key: "$AWS_SECRET_ACCESS_KEY_PRODUCTION"
+  on:
+    branch: master
 notifications:
   email:
     on_failure: always
+env:
+  global:
+  - secure: ItYu0uLyliDpXLlte/ywJ/VuoUuutNwaH2VdUeWqNrgzEO1/xkQE8o3pEqYGloQEIsgAqJHtxYmaSGqTT0EBZajuFr6K9VGMB+Di9XENshwwoyZW4cq68d1TR8NnePShzd7bmBTRj934e0R3u9rusxoSpNWZb6LEYtoX9Ks4L6RsUak3uHL3JZXvOeSCFInF5238qJUGdqfQgJqqjbLdRvplVlcZ+dcN+KVnMkS9u5v1JANRaJ6jmPVzixzk8X6j6UhyEcdQsyiMewjdEBBE/3o/9OkDs24blIq3LuBBPALWiZZ8g5JcGwOiuN5l9er8iboFfFS3F3aQ0KvmMgXJOVArPJlxbqPNIxISRmUj9vSSmGO+YAW8OZ3bL4iUH8a+dObljKsAIhGM+tC1H0k3/iUCvXuy/ZJ1mjefUEzMZ596S9dZs7X5U6TZ5tDQdeQsMd4gKYsUf2ZXerXtorYdYxckQlN3PP1SunU/MhPTheId2Q5FwvgLrjsWN9Ru9zwyt9v9JZEy1as3zobg2/XNr56CvyhuYu4GRhN0rswhccGmo1we1uEXKwBwroNd/xsvtwrH2wcM2/qvG3G8qlLKKFl7m1yi1z6TW/frhoVAx6XqWIYvDGhYmNnQHWU6VkD00r3IrgEjLyC/dnXjEqU7jpa0oSsQCVTgI6dAd5bfo5w=
+  - secure: cRonLIlo+lrYLh6WuGcYTJZyj1kmA7pAv4/1hXpF29An+Y+CfERfZS54rJ3sjs3YEpojBKskc+J+I6mHylXrxhhwmmvSfCJV58xiX11KXSPczPDM6YO+8QgsnHC2FbDDcIyjJV6Z96Jwzo3JU9YU1J/+K14j4gtivvqqVdPxT2ZYFgdGyhDqggIC+F7M8porbuuOsf8wcVET7aBxsUNWVA5LFLSeZfCFG+5ie6r4m4SwNcQvZP4Xbr1xE8wcJg3nH2JKGZ3RkcCe2dUgRjeU4KSZQZTOy9s3bjv5hEjFl5W3jAzZdn7Grc4IPF4yFZBdu2zExKHXXq//LYWBCxgoNfa3ChZ3EHWecVaoiFRPdWlm7OCJAz/a1B7N0AIzPW3ug8foPDr3gk/VewhA4hp17XZsj394ubHISMJ9+slPN3IXMiu+5r9/zi4koBfi2NKDySc3Av3mGdlsxQUvb7woebRPGlkP+gJ88uxj548MCsVdWEW2qIcc+lyNLNpXiCGxdPBn3oGF/+xJdJrxo10LjaKQ7i24KnWLtN74ooiJxwAkfsq5gNTNckmB7Yv7KDjDHrYIdlQJdJHVecK4UOF//77+sbuAsAy8UZwyY6UUCQFOkB2LCx3GxFq7OU/yqCrWufgmyygzRcivsm5ZzNYKko5CTKge/4+zFbwBljbDQCQ=
+  - secure: qpo9ayNkrelLpU2Ofs3jjxIA6DKyXxLsd1xVbWGRzOXRUIFtpydzda+ARpjeruipw7qxFJEHyoELDTWiMH7yTGs9av4D14+Rxnzx06F9Ck9uaMFOBXdm6bHpq5PpxSO20t1NJPblxmNm/DEMH+4ieO8B6YZwd9Crcr18Rwqtps8zl+vS/xUAgmcRVuI3w4Km8LKWLjKP62k5iYXJi1JT6XNm6BXuW26VfOGmjenXgB5uVOY0bI44F/CS8wP+2ZuhnG+13LK92vTkxNMgnKqrQYV57BmQavNu0o0CN/1V058yn0WsHD8y+m9Gi6Td/wsNbj1pKoIhEIBP8MqZ98zQx7qfT1PISR/CMQDLDIdjNbVdD8+CJgaScsGHK0znLzBQYE5d/FeWmG145thKgep/SQWmt3oTFp1ikc0S1HPJ5wU+mai4Sa5UaF1zXeatJ4ecWiDC4XijGdh4U+yvy+uwPuytdfoZUpEIS/AlLiCrRLdzzb7ju9i0fzvILJ1IZ9k+nQjVLQCj2WBViTk1t3wJRh+TFkmKQBPYyiQmjp/aB8zKdhWzmxfWZN+ri+tjPH/DuOuy2Qogw2IGZE5TZ7TMDeQRf7JT2FQVEOTjt9myk+lamVWKJZjpCUe6fcsy8OO7+yaWBzjJVnsjpQzxdV69Ax+wwZOgnlYDyViGQUz//Ko=

@@ -8,7 +8,7 @@ cache:
 - bundler
 script:
 - LOG_LEVEL=error bundle exec rspec -f d
-before_install:
+before_deploy:
 - docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
 deploy:
 - provider: lambda
@@ -17,6 +17,7 @@ deploy:
   region: us-east-1
   role: arn:aws:iam::946183545209:role/lambda-full-access
   runtime: ruby2.5
+  timeout: 30
   module_name: application
   handler_name: handle_event
   environment_variables:
@@ -41,6 +42,7 @@ deploy:
   region: us-east-1
   role: arn:aws:iam::946183545209:role/lambda-full-access
   runtime: ruby2.5
+  timeout: 30
   module_name: application
   handler_name: handle_event
   environment_variables:

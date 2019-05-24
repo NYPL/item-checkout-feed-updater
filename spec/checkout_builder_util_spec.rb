@@ -6,7 +6,7 @@ describe CheckoutBuilderUtil do
     it 'should map 55 to Book' do
       expect(CheckoutBuilderUtil.map_item_type_to_coarse_item_type(55)).to eq('Book')
     end
-    
+
     it 'should map 6 to Image' do
       expect(CheckoutBuilderUtil.map_item_type_to_coarse_item_type(6)).to eq('Image')
     end
@@ -31,6 +31,26 @@ describe CheckoutBuilderUtil do
   end
 
   describe '#initial_checkout_property_assignment' do
+    it 'should assign all the properties of the item to the checkout' do
+      test_item = {
+        'fixedFields' => {
+          '61' => {
+            'value' => 55
+          }
+        },
+        'id' => '123456',
+        'barcode' => '123456789',
+        'updatedDate' => '2019-04-08T15:18:03-04:00'
+      }
+      test_checkout = Checkout.new
+      CheckoutBuilderUtil.initial_checkout_property_assignment(test_item, test_checkout)
+      expect(test_checkout.item_type).to eq(55)
+      expect(test_checkout.coarse_item_type).to eq('Book')
+      expect(test_checkout.location_type).to eq('Research')
+      expect(test_checkout.id).to eq('123456')
+      expect(test_checkout.barcode).to eq('123456789')
+      expect(test_checkout.created).to eq('2019-04-08T15:18:03-00:00')
+    end
   end
 
   describe '#assign_isbn' do

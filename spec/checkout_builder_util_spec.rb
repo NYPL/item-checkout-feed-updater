@@ -115,5 +115,71 @@ describe CheckoutBuilderUtil do
   end
 
   describe '#get_bib' do
+    describe 'when there are no bibIds' do
+      it 'should return early if bibIds isn\'t an Array' do
+        expect(CheckoutBuilderUtil.get_bib({'bibIds' => 'banana'})).to eq(nil)
+        expect(Application.platform_api_client).not_to receive(:get)
+      end
+
+      it 'should return early if bibIds is empty' do
+        expect(CheckoutBuilderUtil.get_bib({'bibIds' => []})).to eq(nil)
+        expect(Application.platform_api_client).not_to receive(:get)
+      end
+    end
+
+    describe 'when there are bibIds but no response data' do
+      test_item = {
+        'bibIds' => [12345],
+        'nyplSource' => 'nypl',
+      }
+      it 'should send the correct request to the client' do
+        allow(Application.platform_api_client).to receive(:get)
+        expect(Application.platform_api_client).to receive(:get).with("bibs/nypl/12345")
+        CheckoutBuilderUtil.get_bib(test_item)
+      end
+
+      it 'should return early if Application response if falsey' do
+        allow(Application.platform_api_client).to receive(:get).and_return(nil)
+        expect(Application.logger).not_to receive(:debug)
+        expect(CheckoutBuilderUtil.get_bib(test_item)).to eq(nil)
+      end
+
+      it 'should return early if Application response data is falsey' do
+        allow(Application.platform_api_client).to receive(:get).and_return({})
+        expect(Application.logger).not_to receive(:debug)
+        expect(CheckoutBuilderUtil.get_bib(test_item)).to eq(nil)
+      end
+    end
+
+    describe 'when there is response data' do
+      test_item = {
+        'bibIds' => [12345],
+        'id' => 'abcdef'
+      }
+      test_response = {
+        'data' => {
+          'a' => 1,
+          'b' => 2,
+          'c' => [],
+          'd' => {
+            'e' => [],
+          }
+        }
+      }
+
+      before(:each) do
+        allow(Application.platform_api_client).to receive(:get).and_return(test_response)
+        allow(Application.logger).to receive(:debug)
+      end
+
+      it 'should log a message if it receives data' do
+        expect(Application.logger).to receive(:debug).with("CheckoutBuilderUtil#get_bib: Got bib for item abcdef: {\"a\":1,\"b\":2,\"c\":[],\"d\":{\"e\":[]}}")
+        CheckoutBuilderUtil.get_bib(test_item)
+      end
+
+      it 'should return the response data that it receives' do
+        expect(CheckoutBuilderUtil.get_bib(test_item)).to eq(test_response['data'])
+      end
+    end
   end
 end

@@ -54,9 +54,64 @@ describe CheckoutBuilderUtil do
   end
 
   describe '#assign_isbn' do
+    it 'should assign the isbn' do
+      allow(MarcUtil).to receive(:marc_value).and_return "9781442466753"
+      test_checkout = Checkout.new
+      CheckoutBuilderUtil.assign_isbn(nil, test_checkout)
+      expect(test_checkout.isbn).to eq("9781442466753")
+    end
+
+    it 'should remove trailing parentheticals' do
+      allow(MarcUtil).to receive(:marc_value).and_return "9781442466753 (hardback)"
+      test_checkout = Checkout.new
+      CheckoutBuilderUtil.assign_isbn(nil, test_checkout)
+      expect(test_checkout.isbn).to eq("9781442466753")
+    end
+
+    it 'should handle nil isbn' do
+      allow(MarcUtil).to receive(:marc_value).and_return nil
+      test_checkout = Checkout.new
+      CheckoutBuilderUtil.assign_isbn(nil, test_checkout)
+      expect(test_checkout.isbn).to eq(nil)
+    end
   end
 
   describe '#checkout_bib_property_assignment' do
+    it 'should return early and not assign any properties if bib is falsey' do
+      test_bib = nil
+      test_checkout = Checkout.new
+      test_item  = {
+        'bibIds' => [
+          'abcdef'
+        ]
+      }
+      assignment = CheckoutBuilderUtil.checkout_bib_property_assignment(test_bib, test_checkout, test_item)
+      expect(assignment).to eq(nil)
+      expect(test_checkout.title).to eq(nil)
+      expect(test_checkout.author).to eq(nil)
+      expect(test_checkout.isbn).to eq(nil)
+      expect(test_checkout.link).to eq(nil)
+    end
+
+    it 'should assign bib and item properties to the checkout' do
+      allow(MarcUtil).to receive(:marc_value).and_return "9781442466753"
+      test_bib = {
+        'title' => 'This test',
+        'author' => 'Me'
+      }
+      test_checkout = Checkout.new
+      test_item  = {
+        'bibIds' => [
+            'abcdef'
+          ]
+      }
+      CheckoutBuilderUtil.checkout_bib_property_assignment(test_bib, test_checkout, test_item)
+      expect(test_checkout.title).to eq('This test')
+      expect(test_checkout.author).to eq('Me')
+      expect(test_checkout.isbn).to eq("9781442466753")
+      expect(test_checkout.link).to eq("https://browse.nypl.org/iii/encore/record/C__Rbabcdef")
+    end
+
   end
 
   describe '#get_bib' do

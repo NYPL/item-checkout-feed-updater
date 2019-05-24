@@ -90,9 +90,11 @@ class PreProcessingRandomizationUtil
     args[0]
   end
 
-  def random_shuffle(array)
-    array
+  def self.random_shuffle(array)
+    arr = array
       .map { |record| [rand, record] }
+    p 'arr', arr
+    arr
       .sort { |(float, record)| float}
       .map { |(float, record)| record }
   end
@@ -101,7 +103,7 @@ class PreProcessingRandomizationUtil
   # The possible values for 'RANDOMIZATION_METHOD' should be exactly names
   # of those methods in
   # PreProcessingRandomizationUtil and PostProcessingRandomizationUtil
-  def process(array)
+  def self.process(array)
     self.send(ENV['RANDOMIZATION_METHOD'], records)
   end
 end

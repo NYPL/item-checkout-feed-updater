@@ -96,12 +96,75 @@ describe 'Randomization Utils' do
     end
 
     describe '#add_randomized_dates!' do
+
+      before(:each) do
+        ENV['RANDOMIZATION_METHOD'] = 'uniform'
+        allow(RandomizationHelperUtil).to receive(:checkouts_requiring_randomized_date).and_return(test_checkouts[0..4])
+        allow(PostProcessingRandomizationUtil).to receive(:uniform).and_return(5.times.to_a)
+      end
+
+      it 'should call the randomization method in ENV' do
+        expect(PostProcessingRandomizationUtil).to receive(:uniform)
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+      end
+
+      it 'should add randomized dates to all the checkouts' do
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+        expect(test_checkouts[0..4].map{ |checkout| checkout.randomized_date}).to eq([0,1,2,3,4])
+      end
+
+      it 'should not change the randomized dates of the other checkouts' do
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+        expect(test_checkouts[5...10].map {|checkout| checkout.randomized_date}).to eq(5.times.map{ true })
+      end
     end
 
     describe '#process!' do
+
+      before(:each) do
+        ENV['RANDOMIZATION_METHOD'] = 'uniform'
+        allow(RandomizationHelperUtil).to receive(:checkouts_requiring_randomized_date).and_return(test_checkouts[0..4])
+        allow(PostProcessingRandomizationUtil).to receive(:uniform).and_return(5.times.to_a)
+      end
+
+      it 'should call the randomization method in ENV' do
+        expect(PostProcessingRandomizationUtil).to receive(:uniform)
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+      end
+
+      it 'should add randomized dates to all the checkouts' do
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+        expect(test_checkouts[0..4].map{ |checkout| checkout.randomized_date}).to eq([0,1,2,3,4])
+      end
+
+      it 'should not change the randomized dates of the other checkouts' do
+        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+        expect(test_checkouts[5...10].map {|checkout| checkout.randomized_date}).to eq(5.times.map{ true })
+      end
     end
 
     describe 'missing randomization method' do
+      it 'should call none if an unrecognized method is called with arguments of the form {new_checkouts: ,...}' do
+        expect(PostProcessingRandomizationUtil).to receive(:none)
+        PostProcessingRandomizationUtil.fake_method({new_checkouts: []})
+      end
+
+      describe 'should call method_missing if the arguments are incorrectly structured' do
+        before(:each) do
+          allow(PostProcessingRandomizationUtil).to receive(:method_missing).and_return(nil)
+        end
+        it 'should call method missing if first arg isn\'t a hash' do
+          expect(PostProcessingRandomizationUtil.fake_method("blah")).to eq(nil)
+        end
+
+        it 'should call method missing if it receives more than one arg' do
+          expect(PostProcessingRandomizationUtil.fake_method({new_checkouts: []}, 'blah')).to eq(nil)
+        end
+
+        it 'should call method missing if argument hash doesn\'t have new_checkouts' do
+          expect(PostProcessingRandomizationUtil.fake_method({})).to eq(nil)
+        end
+      end
     end
   end
 
@@ -110,6 +173,10 @@ describe 'Randomization Utils' do
     end
 
     describe '#process' do
+      it 'should randomly shuffle the input array' do
+        allow(PreProcessingRandomizationUtil).to receive(:rand).and_return(*(10.times.to_a.reverse))
+        expect(PreProcessingRandomizationUtil.random_shuffle([1,2,3,4])).to eq([4,3,2,1])
+      end
     end
 
     describe 'missing method' do

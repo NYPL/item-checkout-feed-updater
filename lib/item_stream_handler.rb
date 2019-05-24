@@ -19,6 +19,7 @@ class ItemStreamHandler
     # Add checkout to end:
     @checkouts << checkout
 
+    Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
     Application.logger.debug "ItemStreamHandler#add_checkout: Collected checkouts size is now #{@checkouts.size}"
   end
 
@@ -79,14 +80,26 @@ class ItemStreamHandler
       .compact
   end
 
+  def dedup_checkout(checkout)
+    Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
+    duplicate = RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+    Application.logger.debug "#{checkout.id} is #{duplicate ? "" : "not"} a duplicate"
+    duplicate
+  end
+
+  def update_recent_ids(checkout)
+    RECENT_IDS[checkout.id] = Time.now
+  end
+
+  def process_checkout(checkout)
+    return if dedup_checkout checkout
+    add_checkout checkout
+    update_count checkout
+    update_recent_ids checkout
+  end
+
   def process_checkouts(checkouts)
-    checkouts
-      .each { |checkout| Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}" }
-      .reject { |checkout| RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i }
-      .each { |checkout| add_checkout checkout }
-      .each { |checkout| Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\"" }
-      .each { |checkout| update_count checkout }
-      .each { |checkout| RECENT_IDS[checkout.id] = Time.now }
+    checkouts.each { |checkout| process_checkout checkout }
   end
 
   def clear_old_data

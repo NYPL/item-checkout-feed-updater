@@ -111,6 +111,22 @@ describe ItemStreamHandler do
   end
 
   describe "#update_recent_ids" do
+    recent_ids = RECENT_IDS
+    before(:each) do
+      RECENT_IDS = []
+    end
+
+    after(:each) do
+      RECENT_IDS = recent_ids
+    end
+
+    it 'should set the value of checkout id key to the current time' do
+      checkout = []
+      allow(checkout).to receive(:id).and_return('id')
+      allow(Time).to receive(:now).and_return('party time')
+      item_stream_handler.update_recent_ids checkout
+      expect(RECENT_IDS[checkout.id]).to eq(Time.now)
+    end
   end
 
   describe "#process_checkout" do

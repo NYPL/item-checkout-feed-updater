@@ -19,7 +19,7 @@ class ItemStreamHandler
     # Add checkout to end:
     @checkouts << checkout
 
-    Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
+    Application.logger.debug "ItemStreamHandler#add_checkout: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
     Application.logger.debug "ItemStreamHandler#add_checkout: Collected checkouts size is now #{@checkouts.size}"
   end
 
@@ -57,7 +57,7 @@ class ItemStreamHandler
     is_checkout = item.is_a?(Hash) &&
       item['status'].is_a?(Hash) && ! item['status']['duedate'].nil? &&
       item['id'].is_a?(String)
-    Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{item}" unless is_checkout
+    Application.logger.debug "ItemStreamHandler#item_is_checkout: Skipping non-checkout item: #{item}" unless is_checkout
     is_checkout
   end
 
@@ -70,7 +70,7 @@ class ItemStreamHandler
 
     decoded_records = records
       .map { |record| avro_decoder('Item').decode record["kinesis"]["data"] }
-      .each { |decoded_record| Application.logger.debug "ItemStreamHandler#handle: Decoded item: #{decoded_record}" }
+      .each { |decoded_record| Application.logger.debug "ItemStreamHandler#get_decoded_records: Decoded item: #{decoded_record}" }
   end
 
   def convert_record_to_checkout(decoded_records)
@@ -80,7 +80,7 @@ class ItemStreamHandler
       .compact
   end
 
-  def dedup_checkout(checkout)
+  def is_duplicate?(checkout)
     Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
     duplicate = RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
     Application.logger.debug "#{checkout.id} is #{duplicate ? "" : "not"} a duplicate"
@@ -92,7 +92,7 @@ class ItemStreamHandler
   end
 
   def process_checkout(checkout)
-    return if dedup_checkout checkout
+    return if is_duplicate? checkout
     add_checkout checkout
     update_count checkout
     update_recent_ids checkout

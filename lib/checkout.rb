@@ -28,6 +28,7 @@ class Checkout
     checkout = Checkout.new
     CheckoutBuilderUtil.initial_checkout_property_assignment(item, checkout)
     bib = CheckoutBuilderUtil.get_bib(item)
+    return nil unless bib
     CheckoutBuilderUtil.checkout_bib_property_assignment(bib, checkout, item)
     checkout
   end

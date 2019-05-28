@@ -91,7 +91,7 @@ class PreProcessingRandomizationUtil
   end
 
   def self.random_shuffle(array)
-    arr = array
+    array
       .map { |record| [rand, record] }
       .sort { |(float, record)| float}
       .map { |(float, record)| record }
@@ -102,6 +102,6 @@ class PreProcessingRandomizationUtil
   # of those methods in
   # PreProcessingRandomizationUtil and PostProcessingRandomizationUtil
   def self.process(array)
-    self.send(ENV['RANDOMIZATION_METHOD'], records)
+    self.send(ENV['RANDOMIZATION_METHOD'], array)
   end
 end

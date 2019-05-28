@@ -102,6 +102,6 @@ class PreProcessingRandomizationUtil
   # of those methods in
   # PreProcessingRandomizationUtil and PostProcessingRandomizationUtil
   def self.process(array)
-    self.send(ENV['RANDOMIZATION_METHOD'], records)
+    self.send(ENV['RANDOMIZATION_METHOD'], array)
   end
 end

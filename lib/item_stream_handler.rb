@@ -64,7 +64,6 @@ class ItemStreamHandler
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
 
-
     records = PreProcessingRandomizationUtil.process(records)
 
     decoded_records = records

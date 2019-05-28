@@ -129,7 +129,7 @@ describe 'Randomization Utils' do
 
       it 'should call the randomization method in ENV' do
         expect(PostProcessingRandomizationUtil).to receive(:uniform)
-        PostProcessingRandomizationUtil.add_randomized_dates!(test_checkouts)
+        PostProcessingRandomizationUtil.process!(test_checkouts)
       end
 
       it 'should add randomized dates to all the checkouts' do
@@ -170,16 +170,24 @@ describe 'Randomization Utils' do
 
   describe 'PreProcessingRandomizationUtil' do
     describe '#random_shuffle' do
-    end
-
-    describe '#process' do
       it 'should randomly shuffle the input array' do
         allow(PreProcessingRandomizationUtil).to receive(:rand).and_return(*(10.times.to_a.reverse))
         expect(PreProcessingRandomizationUtil.random_shuffle([1,2,3,4])).to eq([4,3,2,1])
       end
     end
 
+    describe '#process' do
+      it 'should call the randomization method in ENV' do
+        ENV['RANDOMIZATION_METHOD'] = 'uniform'
+        expect(PreProcessingRandomizationUtil).to receive(:uniform)
+        PreProcessingRandomizationUtil.process []
+      end
+    end
+
     describe 'missing method' do
+      it 'should return the first argument unchanged' do
+        expect(PreProcessingRandomizationUtil.missing('first argument')).to eq('first argument')
+      end
     end
   end
 end

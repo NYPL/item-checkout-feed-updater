@@ -93,8 +93,6 @@ class PreProcessingRandomizationUtil
   def self.random_shuffle(array)
     arr = array
       .map { |record| [rand, record] }
-    p 'arr', arr
-    arr
       .sort { |(float, record)| float}
       .map { |(float, record)| record }
   end

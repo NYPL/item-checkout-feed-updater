@@ -145,9 +145,96 @@ describe ItemStreamHandler do
   end
 
   describe "#get_decoded_records" do
+    mock_decoder = []
+    mock_event = {
+      "Records" => [
+        {
+          "eventSource" => "aws:kinesis",
+          "kinesis" => {
+            "data" => "hello"
+          }
+        },
+        {
+          "eventSource" => "aws:kinesis",
+          "kinesis" => {
+            "data" => "world"
+          }
+        },
+        {
+          "eventSource" => "other_source",
+          "kinesis" => {
+            "data" => "goodbye world"
+          }
+        },
+      ]
+    }
+    before(:each) do
+      allow(AvroDecoder).to receive(:by_name).and_return(mock_decoder)
+      allow(mock_decoder).to receive(:decode).and_return('decoded')
+    end
+
+    it 'should should decode the kinesis data for each record' do
+      expect(mock_decoder).to receive(:decode).with("hello")
+      expect(mock_decoder).to receive(:decode).with("world")
+      item_stream_handler.get_decoded_records mock_event
+    end
+
+    it 'should log a message for each record' do
+      expect(Application.logger).to receive(:debug).twice
+      item_stream_handler.get_decoded_records mock_event
+    end
+
+    it 'should call PreProcessingRandomizationUtil' do
+      allow(PreProcessingRandomizationUtil).to receive(:process).and_return([])
+      expect(PreProcessingRandomizationUtil).to receive(:process)
+      item_stream_handler.get_decoded_records mock_event
+    end
+
+    it 'should filter out non-kinesis events' do
+      expect(mock_decoder).not_to receive(:decode).with("goodbye world")
+      item_stream_handler.get_decoded_records mock_event
+    end
   end
 
   describe "#convert_record_to_checkout" do
+    test_items = [
+      {'status' => {
+          'duedate' => 'yesterday',
+        },
+        'id' => '1234'
+      },
+      {'status' => {
+          'duedate' => 'yesterday',
+        },
+        'id' => '1234'
+      },
+      {'status' => {
+          'duedate' => nil,
+        },
+        'id' => '1234'
+      },
+      {'status' => {},
+        'id' => '1234'
+      },
+      {'status' => 'bad_status',
+        'id' => '1234'
+      },
+      'banana',
+    ]
+
+    before(:each) do
+      allow(Checkout).to receive(:from_item_record).and_return(Checkout.new, nil)
+    end
+
+    it 'should convert exactly the valid items' do
+      expect(Checkout).to receive(:from_item_record).twice
+      item_stream_handler.convert_record_to_checkout test_items
+    end
+
+    it 'should remove nils' do
+      converted = item_stream_handler.convert_record_to_checkout(test_items)
+      expect(converted.length).to eq(1)
+    end
   end
 
   describe "#is_duplicate" do

@@ -108,16 +108,42 @@ describe ItemStreamHandler do
   end
 
   describe "#is_duplicate" do
+    test_checkout = []
+    before(:each) do
+      allow(test_checkout).to receive(:id).and_return 0
+      allow(Time).to receive(:now).and_return 1
+      allow(ENV).to receive(:[]).and_return 1
+    end
+
+    it 'should log messages before and after checking if duplicate' do
+      expect(Application.logger).to receive(:debug).twice
+      item_stream_handler.is_duplicate?(test_checkout)
+    end
+
+    it 'should return a false if RECENT_IDS doesn\'t have the checkout id' do
+      ItemStreamHandler::RECENT_IDS[0] = nil
+      expect(item_stream_handler.is_duplicate? test_checkout).to eq(false)
+    end
+
+    it 'should return false if RECENT_IDS has the checkout id but it has expired' do
+      ItemStreamHandler::RECENT_IDS[0] = 0
+      expect(item_stream_handler.is_duplicate? test_checkout).to eq(false)
+    end
+
+    it 'should return true if RECENT_IDS has the checkout id and it is recent' do
+      ItemStreamHandler::RECENT_IDS[0] = 1
+      expect(item_stream_handler.is_duplicate? test_checkout).to eq(true)
+    end
   end
 
   describe "#update_recent_ids" do
-    recent_ids = RECENT_IDS
+    recent_ids = ItemStreamHandler::RECENT_IDS
     before(:each) do
-      RECENT_IDS = []
+      ItemStreamHandler::RECENT_IDS = {}
     end
 
     after(:each) do
-      RECENT_IDS = recent_ids
+      ItemStreamHandler::RECENT_IDS = recent_ids
     end
 
     it 'should set the value of checkout id key to the current time' do
@@ -125,7 +151,7 @@ describe ItemStreamHandler do
       allow(checkout).to receive(:id).and_return('id')
       allow(Time).to receive(:now).and_return('party time')
       item_stream_handler.update_recent_ids checkout
-      expect(RECENT_IDS[checkout.id]).to eq(Time.now)
+      expect(ItemStreamHandler::RECENT_IDS[checkout.id]).to eq(Time.now)
     end
   end
 
@@ -133,9 +159,6 @@ describe ItemStreamHandler do
   end
 
   describe "#process_checkouts" do
-  end
-
-  describe "#clear_old_data" do
   end
 
   describe '#item_is_checkout?' do

@@ -5,7 +5,7 @@ class RandomizationHelperUtil
     min_date = Time.parse checkout_dates.first
     max_date = Time.parse checkout_dates.last
     # Determine seconds elapsed between first and last checkout
-    return 0 unless max_date.is_a? Time && min_date.is_a? Time
+    return 0 unless max_date.is_a?(Time) && min_date.is_a?(Time)
     max_date - min_date
   end
 

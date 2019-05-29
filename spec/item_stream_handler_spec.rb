@@ -81,6 +81,49 @@ describe ItemStreamHandler do
   end
 
   describe "#update_count" do
+    test_checkout = Checkout.new
+    test_categories = [
+      'Substance',
+      'Quantity',
+      'Relatives',
+    ]
+    before(:each) do
+      allow(test_checkout).to receive(:categories).and_return(test_categories)
+      ItemTypeTally[:tallies] = Hash.new {|h,k| h[k] = 0}
+      ItemTypeTally[:tallies]['Substance'] = 4
+      ItemTypeTally[:tallies]['Quality'] = 1
+    end
+
+    after(:each) do
+      ItemTypeTally[:tallies] = Hash.new {|h,k| h[k] = 0}
+    end
+
+    it 'should add to the ItemTypeTally\'s tallies' do
+      expected_tallies = {
+        'Substance' => 5,
+        'Quantity' => 1,
+        'Relatives' => 1,
+        'Quality' => 1,
+      }
+      item_stream_handler.update_count test_checkout
+      expect(ItemTypeTally[:tallies]).to eq(expected_tallies)
+    end
+
+    it 'should update the checkout\'s tallies' do
+      expected_tallies = {
+        'Substance' => 5,
+        'Quantity' => 1,
+        'Relatives' => 1,
+      }
+      item_stream_handler.update_count test_checkout
+      expect(test_checkout.tallies).to eq(expected_tallies)
+    end
+
+    it 'should not add extraneous categories to the checkout\'s tallies' do
+      item_stream_handler.update_count test_checkout
+      expect(test_checkout.tallies['Quality']).to eq(0)
+    end
+
   end
 
   describe "#remove_old_ids" do

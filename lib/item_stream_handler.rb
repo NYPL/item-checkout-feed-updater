@@ -19,13 +19,14 @@ class ItemStreamHandler
     # Add checkout to end:
     @checkouts << checkout
 
+    Application.logger.debug "ItemStreamHandler#add_checkout: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\""
     Application.logger.debug "ItemStreamHandler#add_checkout: Collected checkouts size is now #{@checkouts.size}"
   end
 
   # Reduce array to the given size
   # e.g. constrain_size([1, 2, 3], 2) => [2, 3]
   def constrain_size(arr, size)
-    arr.shift(arr.size - size) if arr
+    arr.shift(arr.size - size) if arr && arr.size > size
   end
 
   def update_tally_if_necessary
@@ -56,7 +57,7 @@ class ItemStreamHandler
     is_checkout = item.is_a?(Hash) &&
       item['status'].is_a?(Hash) && ! item['status']['duedate'].nil? &&
       item['id'].is_a?(String)
-    Application.logger.debug "ItemStreamHandler#handle: Skipping non-checkout item: #{item}" unless is_checkout
+    Application.logger.debug "ItemStreamHandler#item_is_checkout: Skipping non-checkout item: #{item}" unless is_checkout
     is_checkout
   end
 
@@ -64,28 +65,40 @@ class ItemStreamHandler
     records = event["Records"]
       .select { |record| record["eventSource"] == "aws:kinesis" }
 
-
     records = PreProcessingRandomizationUtil.process(records)
 
     decoded_records = records
       .map { |record| avro_decoder('Item').decode record["kinesis"]["data"] }
-      .each { |decoded_record| Application.logger.debug "ItemStreamHandler#handle: Decoded item: #{decoded_record}" }
+      .each { |decoded_record| Application.logger.debug "ItemStreamHandler#get_decoded_records: Decoded item: #{decoded_record}" }
   end
 
   def convert_record_to_checkout(decoded_records)
     decoded_records
       .select { |decoded| item_is_checkout? decoded }
       .map { |decoded| Checkout.from_item_record decoded }
+      .compact
+  end
+
+  def is_duplicate?(checkout)
+    Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
+    duplicate = RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
+    Application.logger.debug "#{checkout.id} is #{duplicate ? "" : "not"} a duplicate"
+    duplicate
+  end
+
+  def update_recent_ids(checkout)
+    RECENT_IDS[checkout.id] = Time.now
+  end
+
+  def process_checkout(checkout)
+    return if is_duplicate? checkout
+    add_checkout checkout
+    update_count checkout
+    update_recent_ids checkout
   end
 
   def process_checkouts(checkouts)
-    checkouts
-      .each { |checkout| Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}" }
-      .reject { |checkout| RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i }
-      .each { |checkout| add_checkout checkout }
-      .each { |checkout| Application.logger.debug "ItemStreamHandler#handle: Added checkout: #{checkout.id} (#{checkout.barcode}) \"#{checkout.title}\"" }
-      .each { |checkout| update_count checkout }
-      .each { |checkout| RECENT_IDS[checkout.id] = Time.now }
+    checkouts.each { |checkout| process_checkout checkout }
   end
 
   def clear_old_data

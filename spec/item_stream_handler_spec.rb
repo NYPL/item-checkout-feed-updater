@@ -111,7 +111,7 @@ describe ItemStreamHandler do
     test_checkout = []
     before(:each) do
       allow(test_checkout).to receive(:id).and_return 0
-      allow(Time).to receive(:now).and_return 1
+      allow(Time).to receive(:now).and_return Time.parse "2019-05-29 11:21:34 -0400"
       allow(ENV).to receive(:[]).and_return 1
     end
 
@@ -126,12 +126,12 @@ describe ItemStreamHandler do
     end
 
     it 'should return false if RECENT_IDS has the checkout id but it has expired' do
-      ItemStreamHandler::RECENT_IDS[0] = 0
+      ItemStreamHandler::RECENT_IDS[0] = Time.parse "2019-05-29 11:21:24 -0400"
       expect(item_stream_handler.is_duplicate? test_checkout).to eq(false)
     end
 
     it 'should return true if RECENT_IDS has the checkout id and it is recent' do
-      ItemStreamHandler::RECENT_IDS[0] = 1
+      ItemStreamHandler::RECENT_IDS[0] = Time.parse "2019-05-29 11:21:34 -0400"
       expect(item_stream_handler.is_duplicate? test_checkout).to eq(true)
     end
   end

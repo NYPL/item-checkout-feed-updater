@@ -286,9 +286,49 @@ describe ItemStreamHandler do
   end
 
   describe "#process_checkout" do
+    it 'should return early if checkout is duplicate' do
+      allow(item_stream_handler).to receive(:is_duplicate?).and_return(true)
+      expect(item_stream_handler).not_to receive(:add_checkout)
+      expect(item_stream_handler).not_to receive(:update_count)
+      expect(item_stream_handler).not_to receive(:update_recent_ids)
+      processed = item_stream_handler.process_checkout([])
+      expect(processed).to eq(nil)
+    end
+
+    it 'should call all the processing methods if checkout is not duplicate' do
+      allow(item_stream_handler).to receive(:is_duplicate?).and_return(false)
+      allow(item_stream_handler).to receive(:add_checkout).and_return(nil)
+      allow(item_stream_handler).to receive(:update_count).and_return(nil)
+      allow(item_stream_handler).to receive(:update_recent_ids).and_return(nil)
+      expect(item_stream_handler).to receive(:add_checkout)
+      expect(item_stream_handler).to receive(:update_count)
+      expect(item_stream_handler).to receive(:update_recent_ids)
+      processed = item_stream_handler.process_checkout([])
+      expect(processed).to eq(nil)
+    end
   end
 
   describe "#process_checkouts" do
+    before(:each) do
+      allow(item_stream_handler).to receive(:process_checkout).and_return(nil)
+    end
+
+    it 'should call process_checkout for each checkout' do
+      expect(item_stream_handler).to receive(:process_checkout).thrice
+      item_stream_handler.process_checkouts([0,0,0])
+    end
+  end
+
+  describe "#clear_old_data" do
+    it 'should call all the data clearing methods' do
+      allow(item_stream_handler).to receive(:update_tally_if_necessary).and_return(nil)
+      allow(item_stream_handler).to receive(:constrain_size).and_return(nil)
+      allow(item_stream_handler).to receive(:remove_old_ids).and_return(nil)
+      expect(item_stream_handler).to receive(:update_tally_if_necessary)
+      expect(item_stream_handler).to receive(:constrain_size)
+      expect(item_stream_handler).to receive(:remove_old_ids)
+      item_stream_handler.clear_old_data
+    end
   end
 
   describe '#item_is_checkout?' do

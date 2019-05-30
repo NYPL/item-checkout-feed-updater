@@ -83,7 +83,7 @@ class ItemStreamHandler
     Application.logger.debug "De-duping by id: #{checkout.id}, #{RECENT_IDS}"
     duplicate = RECENT_IDS[checkout.id] && Time.now - RECENT_IDS[checkout.id] < ENV["CHECKOUT_ID_EXPIRE_TIME"].to_i
     Application.logger.debug "#{checkout.id} is #{duplicate ? "" : "not"} a duplicate"
-    duplicate
+    !!duplicate
   end
 
   def update_recent_ids(checkout)

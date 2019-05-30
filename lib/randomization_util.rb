@@ -5,6 +5,7 @@ class RandomizationHelperUtil
     min_date = Time.parse checkout_dates.first
     max_date = Time.parse checkout_dates.last
     # Determine seconds elapsed between first and last checkout
+    return 0 unless max_date.is_a?(Time) && min_date.is_a?(Time)
     max_date - min_date
   end
 
@@ -37,8 +38,9 @@ class PostProcessingRandomizationUtil
   def self.uniform(opts)
     # Generate random creation times over covered timespan:
     last_time = RandomizationHelperUtil.last_time opts[:new_checkouts]
+    delta = RandomizationHelperUtil.delta_seconds(opts[:new_checkouts])
     opts[:new_checkouts]
-      .map { |ind| rand RandomizationHelperUtil.delta_seconds(opts[:new_checkouts]) }
+      .map { |ind| rand delta }
       .sort
       .reverse
       .map { |s| Time.at(last_time - s).iso8601 }

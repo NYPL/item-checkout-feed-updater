@@ -5,6 +5,8 @@ require_relative File.join('..', 'lib', 'platform_api_client')
 require_relative File.join('..', 'lib', 'checkout')
 require_relative File.join('..', 'lib', 'item_stream_handler')
 require_relative File.join('..', 'lib', 'checkout_builder_util')
+require_relative File.join('..', 'lib', 'marc_util')
+require_relative File.join('..', 'lib', 'randomization_util')
 
 ENV['RANDOMIZATION_METHOD'] = 'none'
 

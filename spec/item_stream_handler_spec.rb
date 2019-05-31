@@ -367,7 +367,13 @@ describe ItemStreamHandler do
             "kinesis" => {
               "data" => "FAKE_DATA"
             }
-          }
+          },
+          {
+            "eventSource" => "aws:kinesis",
+            "kinesis" => {
+              "data" => "FAKE_DATA"
+            }
+          },
         ]
       }
       decoded_data = {
@@ -403,11 +409,16 @@ describe ItemStreamHandler do
 
       it 'should process a checkout with a new id' do
         item_stream_handler.handle(mock_event)
+        expect(item_stream_handler).to have_received(:add_checkout)
+      end
+
+      it 'should not process a checkout with a recent id in a new batch' do
+        item_stream_handler.handle(mock_event)
+        item_stream_handler.handle(mock_event)
         expect(item_stream_handler).to have_received(:add_checkout).once
       end
 
-      it 'should not process a checkout with a recent id' do
-        item_stream_handler.handle(mock_event)
+      it 'should not process a checkout with a duplicate id in the same batch' do
         item_stream_handler.handle(mock_event)
         expect(item_stream_handler).to have_received(:add_checkout).once
       end
@@ -415,7 +426,7 @@ describe ItemStreamHandler do
       it 'should process a checkout with an old id' do
         ENV['CHECKOUT_ID_EXPIRE_TIME'] = nil
         item_stream_handler.handle(mock_event)
-        expect(item_stream_handler).to have_received(:add_checkout).once
+        expect(item_stream_handler).to have_received(:add_checkout).twice
       end
     end
   end

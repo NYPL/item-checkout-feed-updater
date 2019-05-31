@@ -32,6 +32,12 @@ describe 'Randomization Utils' do
           .to be_within(1)
           .of(8869)
       end
+
+      it 'should return a default value of 0' do
+        expect(RandomizationHelperUtil
+          .delta_seconds([]))
+          .to eq(0)
+      end
     end
 
     describe '#checkouts_requiring_randomized_date' do

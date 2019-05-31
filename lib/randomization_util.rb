@@ -2,10 +2,10 @@ class RandomizationHelperUtil
   def self.delta_seconds(checkouts)
     # Determine min and max dates of checkouts
     checkout_dates = checkouts.map { |checkout| checkout.created }.sort
+    return 0 if checkout_dates.empty?
     min_date = Time.parse checkout_dates.first
     max_date = Time.parse checkout_dates.last
     # Determine seconds elapsed between first and last checkout
-    return 0 unless max_date.is_a?(Time) && min_date.is_a?(Time)
     max_date - min_date
   end
 

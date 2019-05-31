@@ -21,6 +21,7 @@ deploy:
   module_name: application
   handler_name: handle_event
   environment_variables:
+  - CHECKOUT_ID_EXPIRE_TIME=3600
   - LOG_LEVEL=debug
   - MAX_CHECKOUTS_IN_MEMORY=100
   - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=
@@ -46,6 +47,7 @@ deploy:
   module_name: application
   handler_name: handle_event
   environment_variables:
+  - CHECKOUT_ID_EXPIRE_TIME=3600
   - LOG_LEVEL=debug
   - MAX_CHECKOUTS_IN_MEMORY=100
   - NYPL_OAUTH_ID=AQECAHh7ea2tyZ6phZgT4B9BDKwguhlFtRC6hgt+7HbmeFsrsgAAAHgwdgYJKoZIhvcNAQcGoGkwZwIBADBiBgkqhkiG9w0BBwEwHgYJYIZIAWUDBAEuMBEEDKNYR7Scq3DoD98X1gIBEIA1Gv6KaFWVnQJ28twTH0xiL/9rjUwYh52kqjjLMGxco7eoUTw2hnpU3QIYsxrziLQtxxDJVRI=

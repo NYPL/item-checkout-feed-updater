@@ -9,14 +9,14 @@ cache:
 script:
 - LOG_LEVEL=error bundle exec rspec -f d
 before_deploy:
-- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment
+- docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.7 bundle install --deployment
 deploy:
 - provider: lambda
   function_name: ItemCheckoutFeedUpdater-qa
   description: Builds a "checkouts" feed hosted in S3 from Item event stream
   region: us-east-1
   role: arn:aws:iam::946183545209:role/lambda-full-access
-  runtime: ruby2.5
+  runtime: ruby2.7
   timeout: 30
   module_name: application
   handler_name: handle_event
@@ -42,7 +42,7 @@ deploy:
   description: Builds a "checkouts" feed hosted in S3 from Item event stream
   region: us-east-1
   role: arn:aws:iam::946183545209:role/lambda-full-access
-  runtime: ruby2.5
+  runtime: ruby2.7
   timeout: 30
   module_name: application
   handler_name: handle_event

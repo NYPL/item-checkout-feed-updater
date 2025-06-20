@@ -1,3 +1,7 @@
+# Deprecated
+
+As of Jun 20, 2025, archiving this repo as it's no longer used or maintained.
+
 # Item Checkout Feed Updater
 
 This app listens on the Item kinesis stream to identify Item updates that *look like* checkouts. When it encounters an item checkout, it adds the checkout as an event to a list of checkouts maintained in-memory. The checkout item contains the following information:

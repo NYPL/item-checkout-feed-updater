@@ -1,3 +1,7 @@
+# Deprecated
+
+As of Jun 20, 2025, archiving this repo as it's no longer used or maintained.
+
 # Item Checkout Feed Updater
 
 This app listens on the Item kinesis stream to identify Item updates that *look like* checkouts. When it encounters an item checkout, it adds the checkout as an event to a list of checkouts maintained in-memory. The checkout item contains the following information:
@@ -64,6 +68,6 @@ Deployments are entirely handled by Travis-ci.com. To deploy to qa or production
 
 If something about the CD pipeline isn't working, you can manually deploy code as follows:
 
-1. Install dependencies in a docker container: `docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.5 bundle install --deployment`
+1. Install dependencies in a docker container: `docker run -it --rm -v "$PWD":/var/task lambci/lambda:build-ruby2.7 bundle install --deployment`
 1. Bake up a zip file: `zip -r ../item-checkout-feed-updater.zip *` and upload it to the lambda
 1. Make sure ENV vars, handler, and execution time are set correctly
